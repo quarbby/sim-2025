@@ -1,0 +1,5 @@
+.ipynb_checkpoints/*
+data_construction/*
+*.xml
+data_backup/*
+data_output_analysis/*

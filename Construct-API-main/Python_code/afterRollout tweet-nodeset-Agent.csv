@@ -1,0 +1,6 @@
+Node ID,botiness,Twitter add follower density,can receive knowledge,Twitter post density,Twitter remove follower scale factor,Twitter charisma,Twitter auto follow,Twitter quote probability,Twitter reply probability,Twitter repost probability,Twitter reading density,can send knowledge,bot_or_not,Node Label,Language,NUMBER_FOLLOWERS,LOCATION,TWEET_COUNT,probability
+164538619,0,1.0,true,0.218,10.0,0.5,true,0.005,0.01,0.1,4.16,0,FALSE,164538619,en,118,Pa!,30,0.599272
+1043629128270802945,1,1.0,true,0.218,10.0,0.5,true,0.005,0.01,0.1,4.16,0,FALSE,1043629128270802945,en,599,United States,9,0.6057275
+127894292,0,1.0,true,0.218,10.0,0.5,true,0.005,0.01,0.1,4.16,0,FALSE,127894292,en,289,,14,0.5393215
+19848752,1,1.0,true,0.218,10.0,0.5,true,0.005,0.01,0.1,4.16,0,FALSE,19848752,en,516,Munich Germany,13,0.41495067
+823682948,0,1.0,true,0.218,10.0,0.5,true,0.005,0.01,0.1,4.16,0,FALSE,823682948,"en,es,ca",281,"Exeter, England",42,0.52215403
