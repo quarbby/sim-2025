@@ -18,7 +18,7 @@ namespace attributes
  	// Input Networks - from ORA
 	const std::string network_all_communication = "Agent x Agent - All Communication";
 
-	const std::string network_agent_attributes_retweets = "Agent x Attributes - Retweet";
+	const std::string network_agent_attributes_retweets = "Agent_Attributes_Retweet";
 	const std::string network_agent_attributes_replies = "Agent x Attributes - Reply";
 	const std::string network_agent_attributes_quotes = "Agent x Attributes - Quote";
 	const std::string network_agent_attributes_likes = "Agent x Attributes - Likes";

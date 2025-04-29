@@ -21,6 +21,9 @@
     <ClCompile Include="pch.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
+    <ClCompile Include="Lynnette_Twitter_native.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">

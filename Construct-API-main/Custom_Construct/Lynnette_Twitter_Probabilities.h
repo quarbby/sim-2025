@@ -58,6 +58,30 @@ struct Lynnette_Twitter : public Twitter_wf {
 
 		bool does_like(Social_Media_no_followers::media_event* me) {
 			//TODO: to complete
+			unsigned int numBits = media().bende_probability_network->col_size;
+		
+			// number of bende based on probabilities
+			std::vector<int> bend_bias_vector = binary_int_to_vector(me->indexes[InteractionItem::item_keys::attributes], numBits);
+
+			return false;
+		}
+
+		bool does_quote(Social_Media_no_followers::media_event* me) {
+			//TODO: to complete
+
+			return false;
+			//return true;
+		}
+
+		bool does_reply(Social_Media_no_followers::media_event* me) {
+			//TODO: to complete
+
+			return false;
+			//return true;
+		}
+
+		bool does_retweet(Social_Media_no_followers::media_event* me) {
+			//TODO: to complete
 
 			return false;
 			//return true;
@@ -72,17 +96,19 @@ struct Lynnette_Twitter : public Twitter_wf {
 			}
 		}
 
-		// TODO: Change this to attributes
 		//get person's probability of bendE from matrix
 		// row = agent; id is getting from the class it inherits from
 		unsigned int get_bendE() {
 			std::vector<int> bendE_probs;
 
 			for (int i = 0; i < media().bende_probability_network->col_size; i++) {
+				float curr_prob = media().bende_probability_network->examine(id, i);
+				float random_number = media().random.uniform();
 
+				if (curr_prob > random_number) {
+					bendE_probs.push_back(i);
+				}
 			}
-
-			// TO DO: TO COMPLETE
 
 			unsigned int binary_rep = vector_to_binary_int(bendE_probs);
 
@@ -90,7 +116,8 @@ struct Lynnette_Twitter : public Twitter_wf {
 		}
 
 		void enrich_event(Social_Media_no_followers::media_event* me) override {
-			// TO COMPLETE
+			// notsure what it does
+			me->indexes[InteractionItem::item_keys::attributes] = get_bendE();
 		}
 	};
 
@@ -115,16 +142,25 @@ struct Lynnette_Twitter : public Twitter_wf {
 
 	Social_Media_no_followers::media_event* create_post(unsigned int knowledge, unsigned int id) override {
 		auto post = Social_Media_with_followers::create_post(knowledge, id);
-		post->indexes[InteractionItem::item_keys::likes] = 0;
-		//TODO: Add for replies, retweets
+
+		for (int i = (int)InteractionItem::item_keys::Lynnette_start + 1; i < (int)InteractionItem::item_keys::Lynnette_end; i++) {
+			post->indexes[(InteractionItem::item_keys)i] = 0;
+		}
+
+		//post->indexes[InteractionItem::item_keys::likes] = 0;
+		//post->indexes[InteractionItem::item_keys::retweets] = 0;
+		//post->indexes[InteractionItem::item_keys::quotes] = 0;
+		//post->indexes[InteractionItem::item_keys::reply] = 0;
 
 		return post;
 	}
 
-	// TODO: to include number of retweets / replies etc
 	Social_Media_no_followers::media_event* create_response(unsigned int id, Social_Media_no_followers::media_event* parentId) override {
 		auto post = Social_Media_with_followers::create_response(id, parentId);
-		post->indexes[InteractionItem::item_keys::likes] = 0;
+
+		for (int i = (int)InteractionItem::item_keys::Lynnette_start + 1; i < (int)InteractionItem::item_keys::Lynnette_end; i++) {
+			post->indexes[(InteractionItem::item_keys)i] = 0;
+		}
 
 		return post;
 	}

@@ -1,4 +1,4 @@
-# pragma once
+//# pragma once
 
 #include "pch.h"
 #include "Output.h"
@@ -8,8 +8,8 @@
 #include "namespace_attributes.h"
 #include "itemkeys_to_itemnames.h"
 
-//#include "Lynnette_Twitter_native.h"
-#include "Lynnette_Twitter_Probabilities.h"
+#include "Lynnette_Twitter_native.h"
+//#include "Lynnette_Twitter_Probabilities.h"
 //#include "Lynnette_twitter.h"
 
 using namespace attributes;
@@ -135,7 +135,9 @@ int main() {
 
 	Model* model;
 	try {
-		model = new Lynnette_Twitter(model_params, construct);
+		Lynnette_Twitter* lynnetteTwitter = new Lynnette_Twitter(model_params, construct);
+		lynnetteTwitter->setupNetwork();
+		model = (Model*)lynnetteTwitter;
 	}
 	catch (std::exception e) {
 		std::cout << e.what();
