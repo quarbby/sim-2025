@@ -57,11 +57,24 @@ struct Lynnette_Twitter : public Twitter_wf {
 
 
 		bool does_like(Social_Media_no_followers::media_event* me) {
-			//TODO: to complete
-			unsigned int numBits = media().bende_probability_network->col_size;
+			unsigned int numBits = media().bende_probabilities_network->col_size;
 		
 			// number of bende based on probabilities
-			std::vector<int> bend_bias_vector = binary_int_to_vector(me->indexes[InteractionItem::item_keys::attributes], numBits);
+			std::vector<int> bende_vector = binary_int_to_vector(me->indexes[InteractionItem::item_keys::attributes], numBits);
+
+			float sum_corr_value = 0;
+			for (int i : bende_vector)
+			{
+				float corr_value = media().likes_attribute_network->examine(id, i);
+				sum_corr_value += corr_value;
+			}
+
+			float sigmoid_output = sigmoid(sum_corr_value);
+			float random_number = media().random.uniform();
+			if (random_number < sigmoid_output)
+			{
+				return true;
+			}
 
 			return false;
 		}
@@ -70,30 +83,58 @@ struct Lynnette_Twitter : public Twitter_wf {
 			//TODO: to complete
 
 			return false;
-			//return true;
 		}
 
 		bool does_reply(Social_Media_no_followers::media_event* me) {
 			//TODO: to complete
 
 			return false;
-			//return true;
 		}
 
 		bool does_retweet(Social_Media_no_followers::media_event* me) {
 			//TODO: to complete
 
 			return false;
-			//return true;
 		}
 
 		void parse(Social_Media_no_followers::media_event* me) override {
-			if (me->type == Social_Media_no_followers::media_event::event_type::post &&
-				does_like(me)) {
-				me->indexes[InteractionItem::item_keys::likes] += 1;
+			bool isPost = (me->type == Social_Media_no_followers::media_event::event_type::post);
+
+			if (isPost)
+			{
+
+				unsigned int numBits = media().bende_probabilities_network->col_size;
+				std::vector<int> bende_vector = binary_int_to_vector(me->indexes[InteractionItem::item_keys::attributes], numBits);
+				unsigned int postAuthor = me->user;
+
+				if (does_like(me))
+				{
+					me->indexes[InteractionItem::item_keys::likes] += 1;
+
+					// write to output network
+
+					for (int i : bende_vector) {
+						media().likes_output_network->at(postAuthor, i) += 1;
+					}
+
+				}
 				
-				//TO COMPLETE
+				if (does_quote(me))
+				{
+					// TO COMPLETE
+				}
+
+				if (does_reply(me))
+				{
+					// TO COMPLETE
+				}
+
+				if (does_retweet(me))
+				{
+					// TO COMPLETE
+				}
 			}
+
 		}
 
 		//get person's probability of bendE from matrix
@@ -101,8 +142,8 @@ struct Lynnette_Twitter : public Twitter_wf {
 		unsigned int get_bendE() {
 			std::vector<int> bendE_probs;
 
-			for (int i = 0; i < media().bende_probability_network->col_size; i++) {
-				float curr_prob = media().bende_probability_network->examine(id, i);
+			for (int i = 0; i < media().bende_probabilities_network->col_size; i++) {
+				float curr_prob = media().bende_probabilities_network->examine(id, i);
 				float random_number = media().random.uniform();
 
 				if (curr_prob > random_number) {
@@ -116,7 +157,7 @@ struct Lynnette_Twitter : public Twitter_wf {
 		}
 
 		void enrich_event(Social_Media_no_followers::media_event* me) override {
-			// notsure what it does
+			// do this to every event - get a bendE for it
 			me->indexes[InteractionItem::item_keys::attributes] = get_bendE();
 		}
 	};
@@ -161,15 +202,16 @@ struct Lynnette_Twitter : public Twitter_wf {
 	}
 
 	// Add required graphs
-	Graph<float>* bende_probability_network = construct.graph_manager.load_required(attributes::network_input_probabilities, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
 
-	Graph<float>* retweet_attribute_network = construct.graph_manager.load_required(attributes::network_input_retweets, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
+	Graph<float>* bende_probabilities_network = construct.graph_manager.load_required(attributes::network_input_probabilities, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
 
-	Graph<float>* reply_attribute_network = construct.graph_manager.load_required(attributes::network_input_replies, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
+	Graph<float>* retweet_attribute_network = construct.graph_manager.load_required(attributes::graph_retweets, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
 
-	Graph<float>* quotes_attribute_network = construct.graph_manager.load_required(attributes::network_input_quotes, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
+	Graph<float>* reply_attribute_network = construct.graph_manager.load_required(attributes::graph_replies, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
 
-	Graph<float>* likes_attribute_network = construct.graph_manager.load_required(attributes::network_input_likes, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
+	Graph<float>* quotes_attribute_network = construct.graph_manager.load_required(attributes::graph_quotes, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
+
+	Graph<float>* likes_attribute_network = construct.graph_manager.load_required(attributes::graph_likes, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
 
 	Graph<unsigned int>* retweet_output_network = construct.graph_manager.load_required(attributes::retweet_output_network, attributes::nodeset_graph_agent, nodeset_names::time);
 
@@ -178,4 +220,5 @@ struct Lynnette_Twitter : public Twitter_wf {
 	Graph<unsigned int>* quotes_output_network = construct.graph_manager.load_required(attributes::quotes_output_network, attributes::nodeset_graph_agent, nodeset_names::time);
 
 	Graph<unsigned int>* likes_output_network = construct.graph_manager.load_required(attributes::likes_output_network, attributes::nodeset_graph_agent, nodeset_names::time);
+
 };

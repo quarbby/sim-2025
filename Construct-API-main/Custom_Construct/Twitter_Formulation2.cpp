@@ -99,8 +99,8 @@ void Lynnette_Twitter::Lynnette_User::parse(Social_Media_no_followers::media_eve
 
 void Lynnette_Twitter::Lynnette_User::enrich_event(Social_Media_no_followers::media_event* me)
 {
-	// Don't know what the use of this is for so just putting something silly - need to check with Stephen why this was needed in the first place
-	me->indexes[InteractionItem::item_keys::attributes] = get_user_attributes(media().likes_attribute_network);
+	// Something done at every event step
+	//me->indexes[InteractionItem::item_keys::attributes] = get_user_attributes(media().likes_attribute_network);
 }
 
 Lynnette_Twitter::Lynnette_Twitter(const dynet::ParameterMap& parameters, Construct& construct) : Twitter_wf(parameters, construct),
