@@ -27,6 +27,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Lynnette_twitter.cpp" />
     <ClCompile Include="Twitter_Formulation2.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="main_helper.cpp" />

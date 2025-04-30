@@ -7,12 +7,12 @@
 
 using namespace attributes;
 
-struct Lynnette_Twitter : public Twitter_wf {
+struct TwitterFormulation3 : public Twitter_wf {
 	struct Lynnette_User : public Social_Media_with_followers::default_media_user
 	{
 		Lynnette_User(Social_Media_with_followers* media, const Node& node);
 
-		Lynnette_Twitter& media();
+		TwitterFormulation3& media();
 
 		float sigmoid(float x);
 
@@ -61,7 +61,7 @@ struct Lynnette_Twitter : public Twitter_wf {
 	};
 
 
-	Lynnette_Twitter(const dynet::ParameterMap& parameters, Construct& construct);
+	TwitterFormulation3(const dynet::ParameterMap& parameters, Construct& construct);
 
 	Social_Media_no_followers::media_event* create_post(unsigned int knowledge, unsigned int id) override {
 		auto post = Social_Media_with_followers::create_post(knowledge, id);

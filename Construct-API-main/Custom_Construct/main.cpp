@@ -10,7 +10,8 @@
 
 #include "main_helper.h"
 
-//#include "Twitter_Formulation2.h"
+#include "Lynnette_twitter.h"
+#include "Twitter_Formulation2.h"
 #include "Twitter_Formulation3.h"
 
 using namespace attributes;

@@ -30,6 +30,9 @@
     <ClCompile Include="Twitter_Formulation3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Lynnette_twitter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">

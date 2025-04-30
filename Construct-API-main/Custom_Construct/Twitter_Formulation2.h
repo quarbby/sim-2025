@@ -9,12 +9,12 @@ using namespace attributes;
 
 const double PI = 3.14159265358979323846;
 
-struct Lynnette_Twitter : public Twitter_wf {
+struct TwitterFormulation2 : public Twitter_wf {
 	struct Lynnette_User : public Social_Media_with_followers::default_media_user
 	{
 		Lynnette_User(Social_Media_with_followers* media, const Node& node);
 
-		Lynnette_Twitter& media();
+		TwitterFormulation2& media();
 
 		float get_user_attributes(Graph<float>* agent_attribute_network);
 
@@ -38,7 +38,7 @@ struct Lynnette_Twitter : public Twitter_wf {
 	};
 
 
-	Lynnette_Twitter(const dynet::ParameterMap& parameters, Construct& construct);
+	TwitterFormulation2(const dynet::ParameterMap& parameters, Construct& construct);
 
 	// Set forgetfulness of post to expoential decline
 	//void update_event_scores() override {

@@ -1,25 +1,25 @@
 #include "pch.h"
 #include "Twitter_Formulation3.h"
 
-Lynnette_Twitter::Lynnette_User::Lynnette_User(Social_Media_with_followers* media, const Node& node) :
+TwitterFormulation3::Lynnette_User::Lynnette_User(Social_Media_with_followers* media, const Node& node) :
 	Social_Media_with_followers::default_media_user(media, node),
 	Social_Media_no_followers::default_media_user(media, node)
 {
 }
 
-Lynnette_Twitter& Lynnette_Twitter::Lynnette_User::media() {
-	Lynnette_Twitter* temp = dynamic_cast<Lynnette_Twitter*>(media_ptr);
+TwitterFormulation3& TwitterFormulation3::Lynnette_User::media() {
+	TwitterFormulation3* temp = dynamic_cast<TwitterFormulation3*>(media_ptr);
 	// if the media couldn't be up casted the desired class this assertion will be raised.
 	// If you're confused why you probably have a diamond inheritence that makes casting non-trivial
 	assert(temp);
 	return *temp;
 }
 
-float Lynnette_Twitter::Lynnette_User::sigmoid(float x) {
+float TwitterFormulation3::Lynnette_User::sigmoid(float x) {
 	return 1.0f / (1.0f + std::exp(-x));
 }
 
-unsigned int Lynnette_Twitter::Lynnette_User::vector_to_binary_int(std::vector<int>& positions) {
+unsigned int TwitterFormulation3::Lynnette_User::vector_to_binary_int(std::vector<int>& positions) {
 	unsigned int result = 0;
 
 	for (int index : positions) {
@@ -32,7 +32,7 @@ unsigned int Lynnette_Twitter::Lynnette_User::vector_to_binary_int(std::vector<i
 	return result;
 }
 
-std::vector<int> Lynnette_Twitter::Lynnette_User::binary_int_to_vector(unsigned int bendEValue, unsigned int numBits) {
+std::vector<int> TwitterFormulation3::Lynnette_User::binary_int_to_vector(unsigned int bendEValue, unsigned int numBits) {
 	std::vector<int> positions;
 
 	for (int i = 0; i < numBits; i++) {
@@ -45,7 +45,7 @@ std::vector<int> Lynnette_Twitter::Lynnette_User::binary_int_to_vector(unsigned 
 	return positions;
 }
 
-std::vector<int> Lynnette_Twitter::Lynnette_User::getBendEProbs(Social_Media_no_followers::media_event* me)
+std::vector<int> TwitterFormulation3::Lynnette_User::getBendEProbs(Social_Media_no_followers::media_event* me)
 {
 	unsigned int numBits = media().bende_probabilities_network->col_size;
 
@@ -55,7 +55,7 @@ std::vector<int> Lynnette_Twitter::Lynnette_User::getBendEProbs(Social_Media_no_
 	return bende_vector;
 }
 
-bool Lynnette_Twitter::Lynnette_User::compareWithRandom(float sumCorrValue)
+bool TwitterFormulation3::Lynnette_User::compareWithRandom(float sumCorrValue)
 {
 	float sigmoidOutput = sigmoid(sumCorrValue);
 	float randomNumber = media().random.uniform();
@@ -67,7 +67,7 @@ bool Lynnette_Twitter::Lynnette_User::compareWithRandom(float sumCorrValue)
 	return false;
 }
 
-float Lynnette_Twitter::Lynnette_User::getSumCorrValue(std::vector<int> bendEVector, Graph<float> *attributeNetwork)
+float TwitterFormulation3::Lynnette_User::getSumCorrValue(std::vector<int> bendEVector, Graph<float> *attributeNetwork)
 {
 	float sumCorrValue = 0;
 	for (int i : bendEVector)
@@ -79,7 +79,7 @@ float Lynnette_Twitter::Lynnette_User::getSumCorrValue(std::vector<int> bendEVec
 	return sumCorrValue;
 }
 
-bool Lynnette_Twitter::Lynnette_User::does_like(Social_Media_no_followers::media_event* me) 
+bool TwitterFormulation3::Lynnette_User::does_like(Social_Media_no_followers::media_event* me)
 {
 	std::vector<int> bende_vector = getBendEProbs(me);
 	float sum_corr_value = getSumCorrValue(bende_vector, media().likes_attribute_network);
@@ -88,7 +88,7 @@ bool Lynnette_Twitter::Lynnette_User::does_like(Social_Media_no_followers::media
 	return isLike;
 }
 
-bool Lynnette_Twitter::Lynnette_User::does_quote(Social_Media_no_followers::media_event* me)
+bool TwitterFormulation3::Lynnette_User::does_quote(Social_Media_no_followers::media_event* me)
 {
 	std::vector<int> bende_vector = getBendEProbs(me);
 	float sum_corr_value = getSumCorrValue(bende_vector, media().quotes_attribute_network);
@@ -97,7 +97,7 @@ bool Lynnette_Twitter::Lynnette_User::does_quote(Social_Media_no_followers::medi
 	return isQuote;
 }
 
-bool Lynnette_Twitter::Lynnette_User::does_reply(Social_Media_no_followers::media_event* me)
+bool TwitterFormulation3::Lynnette_User::does_reply(Social_Media_no_followers::media_event* me)
 {
 	std::vector<int> bende_vector = getBendEProbs(me);
 	float sum_corr_value = getSumCorrValue(bende_vector, media().reply_attribute_network);
@@ -106,7 +106,7 @@ bool Lynnette_Twitter::Lynnette_User::does_reply(Social_Media_no_followers::medi
 	return isReply;
 }
 
-bool Lynnette_Twitter::Lynnette_User::does_retweet(Social_Media_no_followers::media_event* me)
+bool TwitterFormulation3::Lynnette_User::does_retweet(Social_Media_no_followers::media_event* me)
 {
 	std::vector<int> bende_vector = getBendEProbs(me);
 	float sum_corr_value = getSumCorrValue(bende_vector, media().retweet_attribute_network);
@@ -115,14 +115,14 @@ bool Lynnette_Twitter::Lynnette_User::does_retweet(Social_Media_no_followers::me
 	return isRetweet;
 }
 
-void Lynnette_Twitter::Lynnette_User::writeToOutputNetwork(std::vector<int> bendEVector, int postAuthor, Graph<unsigned int>* outputNetwork)
+void TwitterFormulation3::Lynnette_User::writeToOutputNetwork(std::vector<int> bendEVector, int postAuthor, Graph<unsigned int>* outputNetwork)
 {
 	for (int i : bendEVector) {
 		outputNetwork->at(postAuthor, i) += 1;
 	}
 }
 
-void Lynnette_Twitter::Lynnette_User::parse(Social_Media_no_followers::media_event* me) {
+void TwitterFormulation3::Lynnette_User::parse(Social_Media_no_followers::media_event* me) {
 	bool isPost = (me->type == Social_Media_no_followers::media_event::event_type::post);
 
 	if (isPost)
@@ -160,12 +160,12 @@ void Lynnette_Twitter::Lynnette_User::parse(Social_Media_no_followers::media_eve
 
 }
 
-void Lynnette_Twitter::Lynnette_User::enrich_event(Social_Media_no_followers::media_event* me) {
+void TwitterFormulation3::Lynnette_User::enrich_event(Social_Media_no_followers::media_event* me) {
 	// do this to every event - get a bendE for it
 	me->indexes[InteractionItem::item_keys::attributes] = get_bendE();
 }
 
-Lynnette_Twitter::Lynnette_Twitter(const dynet::ParameterMap& parameters, Construct& construct) : Twitter_wf(parameters, construct),
+TwitterFormulation3::TwitterFormulation3(const dynet::ParameterMap& parameters, Construct& construct) : Twitter_wf(parameters, construct),
 Social_Media_no_followers("Twitter", InteractionItem::item_keys::twitter_event, parameters, construct),
 Social_Media_with_followers("Twitter", InteractionItem::item_keys::twitter_event, parameters, construct)
 {
