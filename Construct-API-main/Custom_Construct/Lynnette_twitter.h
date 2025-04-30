@@ -42,16 +42,12 @@ struct Lynnette_Twitter : public Twitter_wf {
 
 	Social_Media_no_followers::media_event* create_post(unsigned int knowledge, unsigned int id) override;
 
-	void setupNetwork();
-
 	Graph<float>* agent_attribute_network = nullptr;
-
 	Graph<unsigned int>* retweet_output_network = nullptr;
-
 	Graph<unsigned int>* replies_output_network = nullptr;
-
 	Graph<unsigned int>* quotes_output_network = nullptr;
+	Graph<unsigned int>* likes_output_network = nullptr;
 
-	//Graph<unsigned int>* likes_output_network = nullptr;
+	void setupNetwork();
 
 };

@@ -59,8 +59,5 @@
     <ClInclude Include="main_helper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="simulation_constants.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>

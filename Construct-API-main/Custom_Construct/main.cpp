@@ -6,7 +6,6 @@
 #include "item_keys.h"
 #include <cmath>
 #include "namespace_attributes.h"
-#include "simulation_constants.h"
 
 #include "main_helper.h"
 
@@ -16,6 +15,10 @@
 
 using namespace attributes;
 
+#define TWITTERFORMULATION 2
+#define TIME_COUNT 5
+#define DELTA_T 1.0	//in hours
+//#define USE_ORA_NODESET true
 
 int main() {
 	try {
@@ -28,24 +31,22 @@ int main() {
 	dynet::ParameterMap generator_params;
 
 	// Initialize nodesets
-	Nodeset* agent_ns = initializeAgentNodeset(construct);
-	Nodeset* attributes_ns = initializeAttributesNodeset(construct);
-	Nodeset* knowledge_ns = initializeKnowledgeNodeset(construct);
-	Nodeset* time_ns = initializeTimeNodeset(construct);
+	Nodeset* agentNodeset = initializeAgentNodeset(construct);
+	Nodeset* attributesNodeset = initializeAttributesNodeset(construct);
+	Nodeset* knowledgeNodeset = initializeKnowledgeNodeset(construct);
+	Nodeset* timeNodeset = initializeTimeNodeset(construct);
 
 	// Initialize graphs
+	createKnowledgeNet(construct, agentNodeset, knowledgeNodeset);
 
-	Graph<bool>* knowledge_net = construct.graph_manager.load_optional(graph_names::knowledge, true, agent_ns, dense, knowledge_ns, sparse); 	// default value of knowledge net = true means you know the particular piece of knowledge (or know about the hashtag)
-
-
-	Graph<bool>* follower_network = construct.graph_manager.load_optional(graph_names::twit_follow, false, agent_ns, dense, agent_ns, sparse);
+	Graph<bool>* follower_network = construct.graph_manager.load_optional(graph_names::twit_follow, false, agentNodeset, dense, agentNodeset, sparse);
 	generator_params.clear();
 	generator_params["network name"] = attributes::network_all_communication;
 	generator_params["file"] = ora_file_input;
 	construct.graph_manager.generators.dynetml_generator(generator_params, follower_network);
 
 	// Load all Agent x Attributes networks
-	Graph<float>* retweet_probability_network = construct.graph_manager.load_optional(attributes::graph_retweets, 0.0f, agent_ns, dense, attributes_ns, dense);
+	Graph<float>* retweet_probability_network = construct.graph_manager.load_optional(attributes::graph_retweets, 0.0f, agentNodeset, dense, attributesNodeset, dense);
 	generator_params.clear();
 	generator_params["network name"] = attributes::network_input_retweets;
 	generator_params["file"] = attributes::ora_file_input;
@@ -57,7 +58,7 @@ int main() {
 		exit(0);
 	}
 
-	Graph<float>* replies_probability_network = construct.graph_manager.load_optional(attributes::graph_replies, 0.0f, agent_ns, dense, attributes_ns, dense);
+	Graph<float>* replies_probability_network = construct.graph_manager.load_optional(attributes::graph_replies, 0.0f, agentNodeset, dense, attributesNodeset, dense);
 	generator_params.clear();
 	generator_params["network name"] = attributes::network_input_replies;
 	generator_params["file"] = attributes::ora_file_input;
@@ -69,7 +70,7 @@ int main() {
 		exit(0);
 	}
 
-	Graph<float>* quotes_probability_network = construct.graph_manager.load_optional(attributes::graph_quotes, 0.0f, agent_ns, dense, attributes_ns, dense);
+	Graph<float>* quotes_probability_network = construct.graph_manager.load_optional(attributes::graph_quotes, 0.0f, agentNodeset, dense, attributesNodeset, dense);
 	generator_params.clear();
 	generator_params["network name"] = attributes::network_input_quotes;
 	generator_params["file"] = attributes::ora_file_input;
@@ -81,7 +82,7 @@ int main() {
 		exit(0);
 	}
 
-	Graph<float>* likes_probability_network = construct.graph_manager.load_optional(attributes::graph_likes, 0.0f, agent_ns, dense, attributes_ns, dense);
+	Graph<float>* likes_probability_network = construct.graph_manager.load_optional(attributes::graph_likes, 0.0f, agentNodeset, dense, attributesNodeset, dense);
 	generator_params.clear();
 	generator_params["network name"] = attributes::network_input_likes;
 	generator_params["file"] = attributes::ora_file_input;
@@ -93,7 +94,7 @@ int main() {
 		exit(0);
 	}
 
-	Graph<float>* bende_probability_network = construct.graph_manager.load_optional(attributes::graph_bende_probabilities, 0.0f, agent_ns, dense, attributes_ns, dense);
+	Graph<float>* bende_probability_network = construct.graph_manager.load_optional(attributes::graph_bende_probabilities, 0.0f, agentNodeset, dense, attributesNodeset, dense);
 	generator_params.clear();
 	generator_params["network name"] = attributes::network_input_probabilities;
 	generator_params["file"] = attributes::ora_file_input;
@@ -120,14 +121,29 @@ int main() {
 	// Adding the twitter model, additional models can be added here as well
 	// Add models after loading all the nodesets and networks
 	dynet::ParameterMap model_params;
-	model_params["interval time duration"] = std::to_string(deltat);
+	model_params["interval time duration"] = std::to_string(DELTA_T);
 	model_params["maximum post inactivity"] = "24";
 
 	Model* model;
 	try {
-		Lynnette_Twitter* lynnetteTwitter = new Lynnette_Twitter(model_params, construct);
-		lynnetteTwitter->setupNetwork();
-		model = (Model*)lynnetteTwitter;
+		if (TWITTERFORMULATION == 1)
+		{
+			Lynnette_Twitter* lynnetteTwitter = new Lynnette_Twitter(model_params, construct);
+			lynnetteTwitter->setupNetwork();
+			model = (Model*)lynnetteTwitter;
+		}
+		else if (TWITTERFORMULATION == 2)
+		{
+			TwitterFormulation2* lynnetteTwitter = new TwitterFormulation2(model_params, construct);
+			lynnetteTwitter->setupNetwork();
+			model = (Model*)lynnetteTwitter;
+		}
+		else if (TWITTERFORMULATION == 3)
+		{
+			TwitterFormulation3* lynnetteTwitter = new TwitterFormulation3(model_params, construct);
+			lynnetteTwitter->setupNetwork();
+			model = (Model*)lynnetteTwitter;
+		}
 	}
 	catch (std::exception e) {
 		std::cout << e.what();

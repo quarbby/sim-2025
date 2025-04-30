@@ -43,7 +43,6 @@
     <ClInclude Include="main_helper.h" />
     <ClInclude Include="namespace_attributes.h" />
     <ClInclude Include="pch.h" />
-    <ClInclude Include="simulation_constants.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

@@ -46,6 +46,12 @@ Nodeset* initializeAttributesNodeset(Construct& construct)
 
 }
 
+void createKnowledgeNet(Construct& construct, Nodeset* agentNodeset, Nodeset* knowledgeNodeset)
+{
+	// default value of knowledge net = true means you know the particular piece of knowledge (or know about the hashtag)
+	Graph<bool>* knowledge_net = construct.graph_manager.load_optional(graph_names::knowledge, true, agentNodeset, dense, knowledgeNodeset, sparse); 	
+}
+
 void initializeOutputs(Construct& construct)
 {
 	dynet::ParameterMap output_params;

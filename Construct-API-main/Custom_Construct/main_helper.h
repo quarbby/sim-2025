@@ -18,3 +18,5 @@ Nodeset* initializeAttributesNodeset(Construct& construct);
 void initializeOutputs(Construct& construct);
 
 void addInteractionItemNames();
+
+void createKnowledgeNet(Construct& construct, Nodeset* agentNodeset, Nodeset* knowledgeNodeset);

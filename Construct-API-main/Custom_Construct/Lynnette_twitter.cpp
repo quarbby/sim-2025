@@ -87,8 +87,8 @@ void Lynnette_Twitter::Lynnette_User::parse(Social_Media_no_followers::media_eve
 
 		auto post_author = me->user;
 		auto current_time = media().construct.current_time;
-		//media().likes_output_network->at(post_author, current_time) = num_likes;
-
+		
+		media().likes_output_network->at(post_author, current_time) = num_likes;
 		media().retweet_output_network->at(post_author, current_time) = num_reposts;
 		media().quotes_output_network->at(post_author, current_time) = num_quotes;
 		media().replies_output_network->at(post_author, current_time) = num_replies;
@@ -104,8 +104,6 @@ Lynnette_Twitter::Lynnette_Twitter(const dynet::ParameterMap& parameters, Constr
 Social_Media_no_followers("Twitter", InteractionItem::item_keys::twitter_event, parameters, construct),
 Social_Media_with_followers("Twitter", InteractionItem::item_keys::twitter_event, parameters, construct)
 {
-	//InteractionItem::item_names[InteractionItem::item_keys::likes] = attributes::itemkey_likes;
-	//InteractionItem::item_names[InteractionItem::item_keys::attributes] = attributes::itemkey_attributes;
 
 	for (auto& node : agents)
 	{
@@ -138,5 +136,5 @@ void Lynnette_Twitter::setupNetwork()
 
 	quotes_output_network = construct.graph_manager.load_required(attributes::quotes_output_network, attributes::nodeset_graph_agent, nodeset_names::time);
 
-	//likes_output_network = construct.graph_manager.load_required(attributes::likes_output_network, attributes::nodeset_graph_agent, nodeset_names::time);
+	likes_output_network = construct.graph_manager.load_required(attributes::likes_output_network, attributes::nodeset_graph_agent, nodeset_names::time);
 }

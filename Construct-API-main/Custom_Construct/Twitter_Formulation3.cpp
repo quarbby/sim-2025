@@ -174,3 +174,23 @@ Social_Media_with_followers("Twitter", InteractionItem::item_keys::twitter_event
 		users[node.index] = new Lynnette_User(this, node);
 	}
 }
+
+void TwitterFormulation3::setupNetwork() {
+	bende_probabilities_network = construct.graph_manager.load_required(attributes::network_input_probabilities, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
+
+	retweet_attribute_network = construct.graph_manager.load_required(attributes::graph_retweets, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
+
+	reply_attribute_network = construct.graph_manager.load_required(attributes::graph_replies, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
+
+	quotes_attribute_network = construct.graph_manager.load_required(attributes::graph_quotes, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
+
+	likes_attribute_network = construct.graph_manager.load_required(attributes::graph_likes, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
+
+	retweet_output_network = construct.graph_manager.load_required(attributes::retweet_output_network, attributes::nodeset_graph_agent, nodeset_names::time);
+
+	replies_output_network = construct.graph_manager.load_required(attributes::replies_output_network, attributes::nodeset_graph_agent, nodeset_names::time);
+
+	quotes_output_network = construct.graph_manager.load_required(attributes::quotes_output_network, attributes::nodeset_graph_agent, nodeset_names::time);
+
+	likes_output_network = construct.graph_manager.load_required(attributes::likes_output_network, attributes::nodeset_graph_agent, nodeset_names::time);
+}
