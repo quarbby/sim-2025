@@ -20,6 +20,13 @@ struct Lynnette_Twitter : public Twitter_wf {
 
 		std::vector<int> binary_int_to_vector(unsigned int bendEValue, unsigned int numBits);
 
+		std::vector<int> getBendEProbs(Social_Media_no_followers::media_event* me);
+
+		float getSumCorrValue(std::vector<int> bendEVector, Graph<float> *attributeNetwork);
+
+		void writeToOutputNetwork(std::vector<int> bendEVector, int postAuthor, Graph<unsigned int>* outputNetwork);
+
+		bool compareWithRandom(float sumCorrValue);
 
 		bool does_like(Social_Media_no_followers::media_event* me);
 

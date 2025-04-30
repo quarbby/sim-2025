@@ -45,23 +45,21 @@ std::vector<int> Lynnette_Twitter::Lynnette_User::binary_int_to_vector(unsigned 
 	return positions;
 }
 
-bool Lynnette_Twitter::Lynnette_User::does_like(Social_Media_no_followers::media_event* me) 
+std::vector<int> Lynnette_Twitter::Lynnette_User::getBendEProbs(Social_Media_no_followers::media_event* me)
 {
 	unsigned int numBits = media().bende_probabilities_network->col_size;
 
 	// number of bende based on probabilities
 	std::vector<int> bende_vector = binary_int_to_vector(me->indexes[InteractionItem::item_keys::attributes], numBits);
 
-	float sum_corr_value = 0;
-	for (int i : bende_vector)
-	{
-		float corr_value = media().likes_attribute_network->examine(id, i);
-		sum_corr_value += corr_value;
-	}
+	return bende_vector;
+}
 
-	float sigmoid_output = sigmoid(sum_corr_value);
-	float random_number = media().random.uniform();
-	if (random_number < sigmoid_output)
+bool Lynnette_Twitter::Lynnette_User::compareWithRandom(float sumCorrValue)
+{
+	float sigmoidOutput = sigmoid(sumCorrValue);
+	float randomNumber = media().random.uniform();
+	if (randomNumber < sigmoidOutput)
 	{
 		return true;
 	}
@@ -69,19 +67,59 @@ bool Lynnette_Twitter::Lynnette_User::does_like(Social_Media_no_followers::media
 	return false;
 }
 
+float Lynnette_Twitter::Lynnette_User::getSumCorrValue(std::vector<int> bendEVector, Graph<float> *attributeNetwork)
+{
+	float sumCorrValue = 0;
+	for (int i : bendEVector)
+	{
+		float corr_value = attributeNetwork->examine(id, i);
+		sumCorrValue += corr_value;
+	}
+
+	return sumCorrValue;
+}
+
+bool Lynnette_Twitter::Lynnette_User::does_like(Social_Media_no_followers::media_event* me) 
+{
+	std::vector<int> bende_vector = getBendEProbs(me);
+	float sum_corr_value = getSumCorrValue(bende_vector, media().likes_attribute_network);
+	bool isLike = compareWithRandom(sum_corr_value);
+
+	return isLike;
+}
+
 bool Lynnette_Twitter::Lynnette_User::does_quote(Social_Media_no_followers::media_event* me)
 {
-	return false;
+	std::vector<int> bende_vector = getBendEProbs(me);
+	float sum_corr_value = getSumCorrValue(bende_vector, media().quotes_attribute_network);
+	bool isQuote = compareWithRandom(sum_corr_value);
+
+	return isQuote;
 }
 
 bool Lynnette_Twitter::Lynnette_User::does_reply(Social_Media_no_followers::media_event* me)
 {
-	return false;
+	std::vector<int> bende_vector = getBendEProbs(me);
+	float sum_corr_value = getSumCorrValue(bende_vector, media().reply_attribute_network);
+	bool isReply = compareWithRandom(sum_corr_value);
+
+	return isReply;
 }
 
 bool Lynnette_Twitter::Lynnette_User::does_retweet(Social_Media_no_followers::media_event* me)
 {
-	return false;
+	std::vector<int> bende_vector = getBendEProbs(me);
+	float sum_corr_value = getSumCorrValue(bende_vector, media().retweet_attribute_network);
+	bool isRetweet = compareWithRandom(sum_corr_value);
+
+	return isRetweet;
+}
+
+void Lynnette_Twitter::Lynnette_User::writeToOutputNetwork(std::vector<int> bendEVector, int postAuthor, Graph<unsigned int>* outputNetwork)
+{
+	for (int i : bendEVector) {
+		outputNetwork->at(postAuthor, i) += 1;
+	}
 }
 
 void Lynnette_Twitter::Lynnette_User::parse(Social_Media_no_followers::media_event* me) {
@@ -97,28 +135,26 @@ void Lynnette_Twitter::Lynnette_User::parse(Social_Media_no_followers::media_eve
 		if (does_like(me))
 		{
 			me->indexes[InteractionItem::item_keys::likes] += 1;
-
-			// write to output network
-
-			for (int i : bende_vector) {
-				media().likes_output_network->at(postAuthor, i) += 1;
-			}
+			writeToOutputNetwork(bende_vector, postAuthor, media().likes_output_network);
 
 		}
 
 		if (does_quote(me))
 		{
-			// TO COMPLETE
+			me->indexes[InteractionItem::item_keys::quotes] += 1;
+			writeToOutputNetwork(bende_vector, postAuthor, media().quotes_output_network);
 		}
 
 		if (does_reply(me))
 		{
-			// TO COMPLETE
+			me->indexes[InteractionItem::item_keys::reply] += 1;
+			writeToOutputNetwork(bende_vector, postAuthor, media().replies_output_network);
 		}
 
 		if (does_retweet(me))
 		{
-			// TO COMPLETE
+			me->indexes[InteractionItem::item_keys::retweets] += 1;
+			writeToOutputNetwork(bende_vector, postAuthor, media().retweet_output_network);
 		}
 	}
 
