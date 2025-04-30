@@ -31,6 +31,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="main_helper.cpp" />
     <ClCompile Include="pch.cpp" />
+    <ClCompile Include="Twitter_Formulation3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\API_Functions\item_keys.h" />
@@ -74,8 +75,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <PlatformToolset>v142</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>

@@ -1,4 +1,4 @@
-//# pragma once
+# pragma once
 
 #include "pch.h"
 #include "Output.h"
@@ -9,8 +9,9 @@
 #include "simulation_constants.h"
 
 #include "main_helper.h"
-#include "Twitter_Formulation2.h"
-//#include "Twitter_Formulation3.h"
+
+//#include "Twitter_Formulation2.h"
+#include "Twitter_Formulation3.h"
 
 using namespace attributes;
 

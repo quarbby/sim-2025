@@ -27,6 +27,9 @@
     <ClCompile Include="main_helper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Twitter_Formulation3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h">

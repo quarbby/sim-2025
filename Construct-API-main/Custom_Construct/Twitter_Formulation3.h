@@ -10,132 +10,26 @@ using namespace attributes;
 struct Lynnette_Twitter : public Twitter_wf {
 	struct Lynnette_User : public Social_Media_with_followers::default_media_user
 	{
-		Lynnette_User(Social_Media_with_followers* media, const Node& node) :
-			Social_Media_with_followers::default_media_user(media, node),
-			Social_Media_no_followers::default_media_user(media, node) {
-		}
+		Lynnette_User(Social_Media_with_followers* media, const Node& node);
 
-		Lynnette_Twitter& media() {
-			Lynnette_Twitter* temp = dynamic_cast<Lynnette_Twitter*>(media_ptr);
-			// if the media couldn't be up casted the desired class this assertion will be raised.
-			// If you're confused why you probably have a diamond inheritence that makes casting non-trivial
-			assert(temp);
-			return *temp;
-		}
+		Lynnette_Twitter& media();
 
-		float sigmoid(float x) {
-			return 1.0f / (1.0f + std::exp(-x));
-		}
+		float sigmoid(float x);
 
-		//change to returning unsigned int
-		unsigned int vector_to_binary_int(std::vector<int>& positions) {
-			unsigned int result = 0;
+		unsigned int vector_to_binary_int(std::vector<int>& positions);
 
-			for (int index : positions) {
-				// Set the bit at position 'index'
-				if (index < 32) {  // Ensure that the index is within the valid range for a 32-bit integer
-					result |= (1U << index);
-				}
-			}
-
-			return result;
-		}
-
-		//change to unsigned int (instead of string) to vector
-		std::vector<int> binary_int_to_vector(unsigned int bendEValue, unsigned int numBits) {
-			std::vector<int> positions;
-
-			for (int i = 0; i < numBits; i++) {
-				if (bendEValue & 1) { // Extract the least significant bit
-					positions.push_back(i);
-				}
-				bendEValue >>= 1;                // Shift the bits to the right
-			}
-
-			return positions;
-		}
+		std::vector<int> binary_int_to_vector(unsigned int bendEValue, unsigned int numBits);
 
 
-		bool does_like(Social_Media_no_followers::media_event* me) {
-			unsigned int numBits = media().bende_probabilities_network->col_size;
-		
-			// number of bende based on probabilities
-			std::vector<int> bende_vector = binary_int_to_vector(me->indexes[InteractionItem::item_keys::attributes], numBits);
+		bool does_like(Social_Media_no_followers::media_event* me);
 
-			float sum_corr_value = 0;
-			for (int i : bende_vector)
-			{
-				float corr_value = media().likes_attribute_network->examine(id, i);
-				sum_corr_value += corr_value;
-			}
+		bool does_quote(Social_Media_no_followers::media_event* me);
 
-			float sigmoid_output = sigmoid(sum_corr_value);
-			float random_number = media().random.uniform();
-			if (random_number < sigmoid_output)
-			{
-				return true;
-			}
+		bool does_reply(Social_Media_no_followers::media_event* me);
 
-			return false;
-		}
+		bool does_retweet(Social_Media_no_followers::media_event* me);
 
-		bool does_quote(Social_Media_no_followers::media_event* me) {
-			//TODO: to complete
-
-			return false;
-		}
-
-		bool does_reply(Social_Media_no_followers::media_event* me) {
-			//TODO: to complete
-
-			return false;
-		}
-
-		bool does_retweet(Social_Media_no_followers::media_event* me) {
-			//TODO: to complete
-
-			return false;
-		}
-
-		void parse(Social_Media_no_followers::media_event* me) override {
-			bool isPost = (me->type == Social_Media_no_followers::media_event::event_type::post);
-
-			if (isPost)
-			{
-
-				unsigned int numBits = media().bende_probabilities_network->col_size;
-				std::vector<int> bende_vector = binary_int_to_vector(me->indexes[InteractionItem::item_keys::attributes], numBits);
-				unsigned int postAuthor = me->user;
-
-				if (does_like(me))
-				{
-					me->indexes[InteractionItem::item_keys::likes] += 1;
-
-					// write to output network
-
-					for (int i : bende_vector) {
-						media().likes_output_network->at(postAuthor, i) += 1;
-					}
-
-				}
-				
-				if (does_quote(me))
-				{
-					// TO COMPLETE
-				}
-
-				if (does_reply(me))
-				{
-					// TO COMPLETE
-				}
-
-				if (does_retweet(me))
-				{
-					// TO COMPLETE
-				}
-			}
-
-		}
+		void parse(Social_Media_no_followers::media_event* me) override;
 
 		//get person's probability of bendE from matrix
 		// row = agent; id is getting from the class it inherits from
@@ -156,30 +50,11 @@ struct Lynnette_Twitter : public Twitter_wf {
 			return binary_rep;
 		}
 
-		void enrich_event(Social_Media_no_followers::media_event* me) override {
-			// do this to every event - get a bendE for it
-			me->indexes[InteractionItem::item_keys::attributes] = get_bendE();
-		}
+		void enrich_event(Social_Media_no_followers::media_event* me) override;
 	};
 
 
-	Lynnette_Twitter(const dynet::ParameterMap& parameters, Construct& construct) : Twitter_wf(parameters, construct),
-		Social_Media_no_followers("Twitter", InteractionItem::item_keys::twitter_event, parameters, construct),
-		Social_Media_with_followers("Twitter", InteractionItem::item_keys::twitter_event, parameters, construct)
-	{
-
-		for (auto& node : agents) {
-			users[node.index] = new Lynnette_User(this, node);
-		}
-
-	}
-
-	// Set forgetfulness to expoential
-	//void update_event_scores() override {
-	//	for (auto& post : this->list_of_events) {
-	//		post.score = post.child_size() * exp(post.time_stamp);
-	//	}
-	//}
+	Lynnette_Twitter(const dynet::ParameterMap& parameters, Construct& construct);
 
 	Social_Media_no_followers::media_event* create_post(unsigned int knowledge, unsigned int id) override {
 		auto post = Social_Media_with_followers::create_post(knowledge, id);
@@ -201,24 +76,34 @@ struct Lynnette_Twitter : public Twitter_wf {
 		return post;
 	}
 
-	// Add required graphs
+	Graph<float>* bende_probabilities_network = nullptr;
+	Graph<float>* retweet_attribute_network = nullptr;
+	Graph<float>* reply_attribute_network = nullptr;
+	Graph<float>* quotes_attribute_network = nullptr;
+	Graph<float>* likes_attribute_network = nullptr;
+	Graph<unsigned int>* retweet_output_network = nullptr;
+	Graph<unsigned int>* replies_output_network = nullptr;
+	Graph<unsigned int>* quotes_output_network = nullptr;
+	Graph<unsigned int>* likes_output_network = nullptr;
 
-	Graph<float>* bende_probabilities_network = construct.graph_manager.load_required(attributes::network_input_probabilities, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
+	void setupNetwork(){
+		bende_probabilities_network = construct.graph_manager.load_required(attributes::network_input_probabilities, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
 
-	Graph<float>* retweet_attribute_network = construct.graph_manager.load_required(attributes::graph_retweets, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
+		retweet_attribute_network = construct.graph_manager.load_required(attributes::graph_retweets, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
 
-	Graph<float>* reply_attribute_network = construct.graph_manager.load_required(attributes::graph_replies, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
+		reply_attribute_network = construct.graph_manager.load_required(attributes::graph_replies, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
 
-	Graph<float>* quotes_attribute_network = construct.graph_manager.load_required(attributes::graph_quotes, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
+		quotes_attribute_network = construct.graph_manager.load_required(attributes::graph_quotes, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
 
-	Graph<float>* likes_attribute_network = construct.graph_manager.load_required(attributes::graph_likes, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
+		likes_attribute_network = construct.graph_manager.load_required(attributes::graph_likes, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
 
-	Graph<unsigned int>* retweet_output_network = construct.graph_manager.load_required(attributes::retweet_output_network, attributes::nodeset_graph_agent, nodeset_names::time);
+		retweet_output_network = construct.graph_manager.load_required(attributes::retweet_output_network, attributes::nodeset_graph_agent, nodeset_names::time);
 
-	Graph<unsigned int>* replies_output_network = construct.graph_manager.load_required(attributes::replies_output_network, attributes::nodeset_graph_agent, nodeset_names::time);
+		replies_output_network = construct.graph_manager.load_required(attributes::replies_output_network, attributes::nodeset_graph_agent, nodeset_names::time);
 
-	Graph<unsigned int>* quotes_output_network = construct.graph_manager.load_required(attributes::quotes_output_network, attributes::nodeset_graph_agent, nodeset_names::time);
+		quotes_output_network = construct.graph_manager.load_required(attributes::quotes_output_network, attributes::nodeset_graph_agent, nodeset_names::time);
 
-	Graph<unsigned int>* likes_output_network = construct.graph_manager.load_required(attributes::likes_output_network, attributes::nodeset_graph_agent, nodeset_names::time);
+		likes_output_network = construct.graph_manager.load_required(attributes::likes_output_network, attributes::nodeset_graph_agent, nodeset_names::time);
+	}
 
 };
