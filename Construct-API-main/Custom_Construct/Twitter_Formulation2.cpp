@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "Lynnette_Twitter_native.h"
+#include "Twitter_Formulation2.h"
 
 Lynnette_Twitter::Lynnette_User::Lynnette_User(Social_Media_with_followers* media, const Node& node) :
 	Social_Media_with_followers::default_media_user(media, node),
@@ -29,10 +29,6 @@ float Lynnette_Twitter::Lynnette_User::get_user_attributes(Graph<float>* agent_a
 void Lynnette_Twitter::Lynnette_User::repost(media_event* _event)
 {
 	float repost_changed = get_user_attributes(media().retweet_attribute_network);
-
-	//TODO: FIND ATTRIBUTES
-	//for (int i = (int)InteractionItem::item_keys::Lynnette_start + 1; i < (int)InteractionItem::item_keys::Lynnette_end; i++) {
-	//}
 
 	if (random().uniform() < atan_clamp(repost_changed)) {
 		media().create_repost(id, _event);
@@ -103,7 +99,7 @@ void Lynnette_Twitter::Lynnette_User::parse(Social_Media_no_followers::media_eve
 
 void Lynnette_Twitter::Lynnette_User::enrich_event(Social_Media_no_followers::media_event* me)
 {
-	// Don't know what the use of this is for so just putting something silly
+	// Don't know what the use of this is for so just putting something silly - need to check with Stephen why this was needed in the first place
 	me->indexes[InteractionItem::item_keys::attributes] = get_user_attributes(media().likes_attribute_network);
 }
 
@@ -128,13 +124,13 @@ Social_Media_no_followers::media_event* Lynnette_Twitter::create_post(unsigned i
 
 void Lynnette_Twitter::setupNetwork()
 {
-	retweet_attribute_network = construct.graph_manager.load_optional(attributes::network_agent_attributes_retweets, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
+	retweet_attribute_network = construct.graph_manager.load_required(attributes::graph_retweets, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
 
-	reply_attribute_network = construct.graph_manager.load_required(attributes::network_agent_attributes_replies, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
+	reply_attribute_network = construct.graph_manager.load_optional(attributes::graph_replies, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
 
-	quotes_attribute_network = construct.graph_manager.load_required(attributes::network_agent_attributes_quotes, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
+	quotes_attribute_network = construct.graph_manager.load_optional(attributes::graph_quotes, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
 
-	likes_attribute_network = construct.graph_manager.load_required(attributes::network_agent_attributes_likes, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
+	likes_attribute_network = construct.graph_manager.load_optional(attributes::graph_likes, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
 
 	retweet_output_network = construct.graph_manager.load_required(attributes::retweet_output_network, attributes::nodeset_graph_agent, nodeset_names::time);
 

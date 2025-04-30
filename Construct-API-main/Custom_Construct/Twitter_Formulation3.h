@@ -147,11 +147,6 @@ struct Lynnette_Twitter : public Twitter_wf {
 			post->indexes[(InteractionItem::item_keys)i] = 0;
 		}
 
-		//post->indexes[InteractionItem::item_keys::likes] = 0;
-		//post->indexes[InteractionItem::item_keys::retweets] = 0;
-		//post->indexes[InteractionItem::item_keys::quotes] = 0;
-		//post->indexes[InteractionItem::item_keys::reply] = 0;
-
 		return post;
 	}
 
@@ -166,15 +161,15 @@ struct Lynnette_Twitter : public Twitter_wf {
 	}
 
 	// Add required graphs
-	Graph<float>* bende_probability_network = construct.graph_manager.load_required(attributes::network_agent_attributes_probabilities, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
+	Graph<float>* bende_probability_network = construct.graph_manager.load_required(attributes::network_input_probabilities, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
 
-	Graph<float>* retweet_attribute_network = construct.graph_manager.load_required(attributes::network_agent_attributes_retweets, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
+	Graph<float>* retweet_attribute_network = construct.graph_manager.load_required(attributes::network_input_retweets, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
 
-	Graph<float>* reply_attribute_network = construct.graph_manager.load_required(attributes::network_agent_attributes_replies, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
+	Graph<float>* reply_attribute_network = construct.graph_manager.load_required(attributes::network_input_replies, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
 
-	Graph<float>* quotes_attribute_network = construct.graph_manager.load_required(attributes::network_agent_attributes_quotes, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
+	Graph<float>* quotes_attribute_network = construct.graph_manager.load_required(attributes::network_input_quotes, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
 
-	Graph<float>* likes_attribute_network = construct.graph_manager.load_required(attributes::network_agent_attributes_likes, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
+	Graph<float>* likes_attribute_network = construct.graph_manager.load_required(attributes::network_input_likes, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
 
 	Graph<unsigned int>* retweet_output_network = construct.graph_manager.load_required(attributes::retweet_output_network, attributes::nodeset_graph_agent, nodeset_names::time);
 

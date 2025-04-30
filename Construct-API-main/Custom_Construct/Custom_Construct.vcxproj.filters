@@ -21,7 +21,10 @@
     <ClCompile Include="pch.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="Lynnette_Twitter_native.cpp">
+    <ClCompile Include="Twitter_Formulation2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="main_helper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -38,16 +41,19 @@
     <ClInclude Include="main.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Lynnette_Twitter_native.h">
+    <ClInclude Include="Twitter_Formulation2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Lynnette_twitter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Lynnette_Twitter_Probabilities.h">
+    <ClInclude Include="Twitter_Formulation3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="itemkeys_to_itemnames.h">
+    <ClInclude Include="main_helper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="simulation_constants.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

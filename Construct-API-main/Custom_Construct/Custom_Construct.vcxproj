@@ -27,19 +27,21 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Lynnette_Twitter_native.cpp" />
+    <ClCompile Include="Twitter_Formulation2.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="main_helper.cpp" />
     <ClCompile Include="pch.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\API_Functions\item_keys.h" />
-    <ClInclude Include="itemkeys_to_itemnames.h" />
     <ClInclude Include="Lynnette_twitter.h" />
-    <ClInclude Include="Lynnette_Twitter_native.h" />
-    <ClInclude Include="Lynnette_Twitter_Probabilities.h" />
+    <ClInclude Include="Twitter_Formulation2.h" />
+    <ClInclude Include="Twitter_Formulation3.h" />
     <ClInclude Include="main.h" />
+    <ClInclude Include="main_helper.h" />
     <ClInclude Include="namespace_attributes.h" />
     <ClInclude Include="pch.h" />
+    <ClInclude Include="simulation_constants.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>

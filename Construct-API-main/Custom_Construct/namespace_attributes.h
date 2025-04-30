@@ -16,26 +16,27 @@ namespace attributes
 	
 
  	// Input Networks - from ORA
-	const std::string network_all_communication = "Agent x Agent - All Communication";
+	const std::string network_all_communication = "Agent_Agent_All_Communication";
 
-	const std::string network_agent_attributes_retweets = "Agent_Attributes_Retweet";
-	const std::string network_agent_attributes_replies = "Agent x Attributes - Reply";
-	const std::string network_agent_attributes_quotes = "Agent x Attributes - Quote";
-	const std::string network_agent_attributes_likes = "Agent x Attributes - Likes";
+	const std::string network_input_retweets = "Agent_Attributes_Retweet";
+	const std::string network_input_replies = "Agent_Attributes_Reply";
+	const std::string network_input_quotes = "Agent_Attributes_Quote";
+	const std::string network_input_likes = "Agent_Attributes_Likes";
+	const std::string network_input_probabilities = "Agent_Attributes_Probability";
 
-	const std::string network_agent_attributes_probabilities = "Agent x Attributes - Probability";
-
-	// Input Networks - for Construct
-	const std::string graph_agent_attributes = "agent_attributes_network";
+	// Input Networks Names - for Construct
+	const std::string graph_agent_attributes = "graph_agent_attributes_network";
+	const std::string graph_retweets = "graph_agent_attributes_retweet";
+	const std::string graph_replies = "graph_agent_attributes_replies";
+	const std::string graph_quotes = "graph_agent_attributes_quotes";
+	const std::string graph_likes = "graph_agent_attributes_likes";
+	const std::string graph_bende_probabilities = "graph_agent_attributes_probabilities";
 
 	// Nodeset
-
 	const std::string nodeset_agent = "Agent";
-
 	const std::string nodeset_attributes = "Attributes";
 
 	const std::string nodeset_graph_agent = "agent";
-
 	const std::string nodeset_graph_attributes = "Attributes";
 
 	// Item key names 
