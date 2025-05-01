@@ -30,7 +30,7 @@ namespace attributes
 	const std::string graph_replies = "graph_agent_attributes_replies";
 	const std::string graph_quotes = "graph_agent_attributes_quotes";
 	const std::string graph_likes = "graph_agent_attributes_likes";
-	const std::string graph_bende_probabilities = "graph_agent_attributes_probabilities";
+	const std::string graph_bende_probabilities = "graph_bende_probabilities";
 
 	// Nodeset
 	const std::string nodeset_agent = "Agent";

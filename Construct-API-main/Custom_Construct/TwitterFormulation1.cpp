@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "Lynnette_twitter.h"
+#include "TwitterFormulation1.h"
 
 Lynnette_Twitter::Lynnette_User::Lynnette_User(Social_Media_with_followers* media, const Node& node) :
 	Social_Media_with_followers::default_media_user(media, node),

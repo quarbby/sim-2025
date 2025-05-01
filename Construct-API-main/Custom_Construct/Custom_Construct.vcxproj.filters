@@ -21,16 +21,16 @@
     <ClCompile Include="pch.cpp">
       <Filter>Resource Files</Filter>
     </ClCompile>
-    <ClCompile Include="Twitter_Formulation2.cpp">
+    <ClCompile Include="TwitterFormulation2.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="main_helper.cpp">
+    <ClCompile Include="MainHelper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Twitter_Formulation3.cpp">
+    <ClCompile Include="TwitterFormulation3.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Lynnette_twitter.cpp">
+    <ClCompile Include="TwitterFormulation1.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -41,22 +41,22 @@
     <ClInclude Include="..\API_Functions\item_keys.h">
       <Filter>Source Files</Filter>
     </ClInclude>
-    <ClInclude Include="namespace_attributes.h">
+    <ClInclude Include="attributes.h">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="main.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Twitter_Formulation2.h">
+    <ClInclude Include="TwitterFormulation2.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Lynnette_twitter.h">
+    <ClInclude Include="TwitterFormulation1.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Twitter_Formulation3.h">
+    <ClInclude Include="TwitterFormulation3.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="main_helper.h">
+    <ClInclude Include="MainHelper.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

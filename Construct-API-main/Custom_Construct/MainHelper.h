@@ -3,7 +3,7 @@
 #include "SocialMedia.h"
 #include "item_keys.h"
 #include <cmath>
-#include "namespace_attributes.h"
+#include "attributes.h"
 
 using namespace attributes;
 
@@ -20,3 +20,9 @@ void initializeOutputs(Construct& construct);
 void addInteractionItemNames();
 
 void createKnowledgeNet(Construct& construct, Nodeset* agentNodeset, Nodeset* knowledgeNodeset);
+
+void createOutputNetworks(Construct& construct);
+
+void createFollowerNet(Construct& construct, Nodeset* agentNodeset, dynet::ParameterMap generator_params);
+
+void readAgentAttributeNetworks(Construct& construct, dynet::ParameterMap generator_params, Nodeset* agentNodeset, Nodeset* attribtuesNodeset);

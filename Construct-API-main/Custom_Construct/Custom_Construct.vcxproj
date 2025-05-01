@@ -27,21 +27,21 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Lynnette_twitter.cpp" />
-    <ClCompile Include="Twitter_Formulation2.cpp" />
+    <ClCompile Include="TwitterFormulation1.cpp" />
+    <ClCompile Include="TwitterFormulation2.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="main_helper.cpp" />
+    <ClCompile Include="MainHelper.cpp" />
     <ClCompile Include="pch.cpp" />
-    <ClCompile Include="Twitter_Formulation3.cpp" />
+    <ClCompile Include="TwitterFormulation3.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\API_Functions\item_keys.h" />
-    <ClInclude Include="Lynnette_twitter.h" />
-    <ClInclude Include="Twitter_Formulation2.h" />
-    <ClInclude Include="Twitter_Formulation3.h" />
+    <ClInclude Include="TwitterFormulation1.h" />
+    <ClInclude Include="TwitterFormulation2.h" />
+    <ClInclude Include="TwitterFormulation3.h" />
     <ClInclude Include="main.h" />
-    <ClInclude Include="main_helper.h" />
-    <ClInclude Include="namespace_attributes.h" />
+    <ClInclude Include="MainHelper.h" />
+    <ClInclude Include="attributes.h" />
     <ClInclude Include="pch.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

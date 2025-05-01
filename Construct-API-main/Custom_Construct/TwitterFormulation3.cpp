@@ -1,5 +1,5 @@
 #include "pch.h"
-#include "Twitter_Formulation3.h"
+#include "TwitterFormulation3.h"
 
 TwitterFormulation3::Lynnette_User::Lynnette_User(Social_Media_with_followers* media, const Node& node) :
 	Social_Media_with_followers::default_media_user(media, node),
@@ -7,7 +7,8 @@ TwitterFormulation3::Lynnette_User::Lynnette_User(Social_Media_with_followers* m
 {
 }
 
-TwitterFormulation3& TwitterFormulation3::Lynnette_User::media() {
+TwitterFormulation3& TwitterFormulation3::Lynnette_User::media() 
+{
 	TwitterFormulation3* temp = dynamic_cast<TwitterFormulation3*>(media_ptr);
 	// if the media couldn't be up casted the desired class this assertion will be raised.
 	// If you're confused why you probably have a diamond inheritence that makes casting non-trivial
@@ -15,11 +16,13 @@ TwitterFormulation3& TwitterFormulation3::Lynnette_User::media() {
 	return *temp;
 }
 
-float TwitterFormulation3::Lynnette_User::sigmoid(float x) {
+float TwitterFormulation3::Lynnette_User::sigmoidActivation(float x) 
+{
 	return 1.0f / (1.0f + std::exp(-x));
 }
 
-unsigned int TwitterFormulation3::Lynnette_User::vector_to_binary_int(std::vector<int>& positions) {
+unsigned int TwitterFormulation3::Lynnette_User::vector_to_binary_int(std::vector<int>& positions) 
+{
 	unsigned int result = 0;
 
 	for (int index : positions) {
@@ -32,7 +35,8 @@ unsigned int TwitterFormulation3::Lynnette_User::vector_to_binary_int(std::vecto
 	return result;
 }
 
-std::vector<int> TwitterFormulation3::Lynnette_User::binary_int_to_vector(unsigned int bendEValue, unsigned int numBits) {
+std::vector<int> TwitterFormulation3::Lynnette_User::binaryIntToVector(unsigned int bendEValue, unsigned int numBits) 
+{
 	std::vector<int> positions;
 
 	for (int i = 0; i < numBits; i++) {
@@ -50,14 +54,14 @@ std::vector<int> TwitterFormulation3::Lynnette_User::getBendEProbs(Social_Media_
 	unsigned int numBits = media().bende_probabilities_network->col_size;
 
 	// number of bende based on probabilities
-	std::vector<int> bende_vector = binary_int_to_vector(me->indexes[InteractionItem::item_keys::attributes], numBits);
+	std::vector<int> bende_vector = binaryIntToVector(me->indexes[InteractionItem::item_keys::attributes], numBits);
 
 	return bende_vector;
 }
 
 bool TwitterFormulation3::Lynnette_User::compareWithRandom(float sumCorrValue)
 {
-	float sigmoidOutput = sigmoid(sumCorrValue);
+	float sigmoidOutput = sigmoidActivation(sumCorrValue);
 	float randomNumber = media().random.uniform();
 	if (randomNumber < sigmoidOutput)
 	{
@@ -129,7 +133,7 @@ void TwitterFormulation3::Lynnette_User::parse(Social_Media_no_followers::media_
 	{
 
 		unsigned int numBits = media().bende_probabilities_network->col_size;
-		std::vector<int> bende_vector = binary_int_to_vector(me->indexes[InteractionItem::item_keys::attributes], numBits);
+		std::vector<int> bende_vector = binaryIntToVector(me->indexes[InteractionItem::item_keys::attributes], numBits);
 		unsigned int postAuthor = me->user;
 
 		if (does_like(me))
@@ -165,18 +169,62 @@ void TwitterFormulation3::Lynnette_User::enrich_event(Social_Media_no_followers:
 	me->indexes[InteractionItem::item_keys::attributes] = get_bendE();
 }
 
+//get person's probability of bendE from matrix
+// row = agent; id is getting from the class it inherits from
+unsigned int TwitterFormulation3::Lynnette_User::get_bendE() {
+	std::vector<int> bendE_probs;
+
+	for (int i = 0; i < media().bende_probabilities_network->col_size; i++) {
+		float curr_prob = media().bende_probabilities_network->examine(id, i);
+		float random_number = media().random.uniform();
+
+		if (curr_prob > random_number) {
+			bendE_probs.push_back(i);
+		}
+	}
+
+	unsigned int binary_rep = vector_to_binary_int(bendE_probs);
+
+	return binary_rep;
+}
+
 TwitterFormulation3::TwitterFormulation3(const dynet::ParameterMap& parameters, Construct& construct) : Twitter_wf(parameters, construct),
 Social_Media_no_followers("Twitter", InteractionItem::item_keys::twitter_event, parameters, construct),
 Social_Media_with_followers("Twitter", InteractionItem::item_keys::twitter_event, parameters, construct)
 {
 
-	for (auto& node : agents) {
+	for (auto& node : agents)
+	{
 		users[node.index] = new Lynnette_User(this, node);
 	}
 }
 
-void TwitterFormulation3::setupNetwork() {
-	bende_probabilities_network = construct.graph_manager.load_required(attributes::network_input_probabilities, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
+Social_Media_no_followers::media_event* TwitterFormulation3::create_post(unsigned int knowledge, unsigned int id) 
+{
+	auto post = Social_Media_with_followers::create_post(knowledge, id);
+
+	for (int i = (int)InteractionItem::item_keys::Lynnette_start + 1; i < (int)InteractionItem::item_keys::Lynnette_end; i++) {
+		post->indexes[(InteractionItem::item_keys)i] = 0;
+	}
+
+	return post;
+}
+
+Social_Media_no_followers::media_event* TwitterFormulation3::create_response(unsigned int id, Social_Media_no_followers::media_event* parentId)
+{
+	auto post = Social_Media_with_followers::create_response(id, parentId);
+
+	for (int i = (int)InteractionItem::item_keys::Lynnette_start + 1; i < (int)InteractionItem::item_keys::Lynnette_end; i++) {
+		post->indexes[(InteractionItem::item_keys)i] = 0;
+	}
+
+	return post;
+}
+
+
+void TwitterFormulation3::setupNetwork() 
+{
+	bende_probabilities_network = construct.graph_manager.load_required(attributes::graph_bende_probabilities, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
 
 	retweet_attribute_network = construct.graph_manager.load_required(attributes::graph_retweets, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
 
