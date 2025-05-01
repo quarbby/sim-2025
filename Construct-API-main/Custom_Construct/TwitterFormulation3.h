@@ -41,6 +41,8 @@ struct TwitterFormulation3 : public Twitter_wf {
 		unsigned int get_bendE();
 
 		void enrich_event(Social_Media_no_followers::media_event* me) override;
+
+		Social_Media_with_followers* m_Media = nullptr;
 	};
 
 

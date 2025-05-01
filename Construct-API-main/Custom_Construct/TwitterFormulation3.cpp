@@ -5,6 +5,7 @@ TwitterFormulation3::Lynnette_User::Lynnette_User(Social_Media_with_followers* m
 	Social_Media_with_followers::default_media_user(media, node),
 	Social_Media_no_followers::default_media_user(media, node)
 {
+	m_Media = media;
 }
 
 TwitterFormulation3& TwitterFormulation3::Lynnette_User::media() 
@@ -121,12 +122,21 @@ bool TwitterFormulation3::Lynnette_User::does_retweet(Social_Media_no_followers:
 
 void TwitterFormulation3::Lynnette_User::writeToOutputNetwork(std::vector<int> bendEVector, int postAuthor, Graph<unsigned int>* outputNetwork)
 {
-	for (int i : bendEVector) {
-		outputNetwork->at(postAuthor, i) += 1;
-	}
+	//for (int i : bendEVector) 
+	//{
+	//	outputNetwork->at(postAuthor, i) += 1;
+	//}
+
+	// add 1 at (postAuthor, currentTime)
+
+	float currTimeFloat = m_Media->time;
+
+	int currentTime = currTimeFloat;
+	outputNetwork->at(postAuthor, currentTime) += 1;
 }
 
-void TwitterFormulation3::Lynnette_User::parse(Social_Media_no_followers::media_event* me) {
+void TwitterFormulation3::Lynnette_User::parse(Social_Media_no_followers::media_event* me) 
+{
 	bool isPost = (me->type == Social_Media_no_followers::media_event::event_type::post);
 
 	if (isPost)
@@ -139,6 +149,7 @@ void TwitterFormulation3::Lynnette_User::parse(Social_Media_no_followers::media_
 		if (does_like(me))
 		{
 			me->indexes[InteractionItem::item_keys::likes] += 1;
+			
 			writeToOutputNetwork(bende_vector, postAuthor, media().likes_output_network);
 
 		}
@@ -164,14 +175,16 @@ void TwitterFormulation3::Lynnette_User::parse(Social_Media_no_followers::media_
 
 }
 
-void TwitterFormulation3::Lynnette_User::enrich_event(Social_Media_no_followers::media_event* me) {
+void TwitterFormulation3::Lynnette_User::enrich_event(Social_Media_no_followers::media_event* me)
+{
 	// do this to every event - get a bendE for it
 	me->indexes[InteractionItem::item_keys::attributes] = get_bendE();
 }
 
 //get person's probability of bendE from matrix
 // row = agent; id is getting from the class it inherits from
-unsigned int TwitterFormulation3::Lynnette_User::get_bendE() {
+unsigned int TwitterFormulation3::Lynnette_User::get_bendE() 
+{
 	std::vector<int> bendE_probs;
 
 	for (int i = 0; i < media().bende_probabilities_network->col_size; i++) {
