@@ -28,8 +28,6 @@ struct TwitterFormulation3 : public Twitter_wf {
 
 		bool compareWithRandom(float sumCorrValue);
 
-		bool does_like(Social_Media_no_followers::media_event* me);
-
 		bool does_quote(Social_Media_no_followers::media_event* me);
 
 		bool does_reply(Social_Media_no_followers::media_event* me);

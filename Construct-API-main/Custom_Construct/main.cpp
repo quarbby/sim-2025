@@ -16,7 +16,7 @@
 using namespace attributes;
 
 #define TWITTERFORMULATION 3
-#define TIME_COUNT 5
+#define TIME_COUNT 2
 
 #define DELTA_T 1.0	//in hours
 

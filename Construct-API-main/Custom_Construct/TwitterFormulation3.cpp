@@ -84,15 +84,6 @@ float TwitterFormulation3::Lynnette_User::getSumCorrValue(std::vector<int> bendE
 	return sumCorrValue;
 }
 
-bool TwitterFormulation3::Lynnette_User::does_like(Social_Media_no_followers::media_event* me)
-{
-	std::vector<int> bende_vector = getBendEProbs(me);
-	float sum_corr_value = getSumCorrValue(bende_vector, media().likes_attribute_network);
-	bool isLike = compareWithRandom(sum_corr_value);
-
-	return isLike;
-}
-
 bool TwitterFormulation3::Lynnette_User::does_quote(Social_Media_no_followers::media_event* me)
 {
 	std::vector<int> bende_vector = getBendEProbs(me);
@@ -122,6 +113,9 @@ bool TwitterFormulation3::Lynnette_User::does_retweet(Social_Media_no_followers:
 
 void TwitterFormulation3::Lynnette_User::writeToOutputNetwork(std::vector<int> bendEVector, int postAuthor, Graph<unsigned int>* outputNetwork)
 {
+	// TODO: Figure out which is correct
+
+	// Stephen wrote this 
 	//for (int i : bendEVector) 
 	//{
 	//	outputNetwork->at(postAuthor, i) += 1;
@@ -129,6 +123,7 @@ void TwitterFormulation3::Lynnette_User::writeToOutputNetwork(std::vector<int> b
 
 	// add 1 at (postAuthor, currentTime)
 
+	// I wrote this 
 	float currTimeFloat = m_Media->time;
 
 	int currentTime = currTimeFloat;
@@ -145,14 +140,6 @@ void TwitterFormulation3::Lynnette_User::parse(Social_Media_no_followers::media_
 		unsigned int numBits = media().bende_probabilities_network->col_size;
 		std::vector<int> bende_vector = binaryIntToVector(me->indexes[InteractionItem::item_keys::attributes], numBits);
 		unsigned int postAuthor = me->user;
-
-		if (does_like(me))
-		{
-			me->indexes[InteractionItem::item_keys::likes] += 1;
-			
-			writeToOutputNetwork(bende_vector, postAuthor, media().likes_output_network);
-
-		}
 
 		if (does_quote(me))
 		{
@@ -245,13 +232,9 @@ void TwitterFormulation3::setupNetwork()
 
 	quotes_attribute_network = construct.graph_manager.load_required(attributes::graph_quotes, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
 
-	likes_attribute_network = construct.graph_manager.load_required(attributes::graph_likes, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
-
 	retweet_output_network = construct.graph_manager.load_required(attributes::retweet_output_network, attributes::nodeset_graph_agent, nodeset_names::time);
 
 	replies_output_network = construct.graph_manager.load_required(attributes::replies_output_network, attributes::nodeset_graph_agent, nodeset_names::time);
 
 	quotes_output_network = construct.graph_manager.load_required(attributes::quotes_output_network, attributes::nodeset_graph_agent, nodeset_names::time);
-
-	likes_output_network = construct.graph_manager.load_required(attributes::likes_output_network, attributes::nodeset_graph_agent, nodeset_names::time);
 }
