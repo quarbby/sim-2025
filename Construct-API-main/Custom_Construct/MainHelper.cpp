@@ -68,7 +68,7 @@ void initializeOutputs(Construct& construct)
 	outputParams["network names"] = attributes::retweet_output_network + "," +
 		attributes::replies_output_network + "," +
 		attributes::quotes_output_network + "," +
-		attributes::likes_output_network + "," +
+		//attributes::likes_output_network + "," +
 		graph_names::twit_follow;
 	outputParams["time periods"] = "all";
 	outputParams["output file"] = attributes::output_dyxml;
