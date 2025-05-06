@@ -55,7 +55,7 @@ std::vector<int> TwitterFormulation3::Lynnette_User::getBendEProbs(Social_Media_
 	unsigned int numBits = media().bende_probabilities_network->col_size;
 
 	// number of bende based on probabilities
-	std::vector<int> bende_vector = binaryIntToVector(me->indexes[InteractionItem::item_keys::attributes], numBits);
+	std::vector<int> bende_vector = binaryIntToVector(me->indexes[InteractionItem::item_keys::bendE], numBits);
 
 	return bende_vector;
 }
@@ -136,29 +136,39 @@ void TwitterFormulation3::Lynnette_User::parse(Social_Media_no_followers::media_
 
 	if (isPost)
 	{
-		//TODO: Decide what or when to engage - depends on engagement network probability
+		unsigned int postAuthor = me->user;
+		int currAgentID = id;
+
+		float random_number = media().random.uniform();
 
 		unsigned int numBits = media().bende_probabilities_network->col_size;
-		std::vector<int> bende_vector = binaryIntToVector(me->indexes[InteractionItem::item_keys::attributes], numBits);
-		unsigned int postAuthor = me->user;
+		std::vector<int> bende_vector = binaryIntToVector(me->indexes[InteractionItem::item_keys::bendE], numBits);
 
-		if (does_quote(me))
+		//Decide what to engage - depends on engagement network probability
+		//Decide whether to engage - depends on the BENDe vector attached to each post
+
+		float quote_prob = media().engagement_probabilities_network->examine(id, 0);
+		float reply_prob = media().engagement_probabilities_network->examine(id, 1);
+		float retweet_prob = media().engagement_probabilities_network->examine(id, 2);
+
+		// If want to limit to one engagement only - then find the highest prob
+
+		if ((quote_prob < random_number) && (does_quote(me)))
 		{
 			me->indexes[InteractionItem::item_keys::quotes] += 1;
 			writeToOutputNetwork(bende_vector, postAuthor, media().quotes_output_network);
 		}
-
-		if (does_reply(me))
+		if ((reply_prob < random_number) && (does_reply(me)))
 		{
 			me->indexes[InteractionItem::item_keys::reply] += 1;
 			writeToOutputNetwork(bende_vector, postAuthor, media().replies_output_network);
 		}
-
-		if (does_retweet(me))
+		if ((retweet_prob < random_number) && (does_retweet(me)))
 		{
 			me->indexes[InteractionItem::item_keys::retweets] += 1;
 			writeToOutputNetwork(bende_vector, postAuthor, media().retweet_output_network);
 		}
+
 	}
 
 }
@@ -167,7 +177,7 @@ void TwitterFormulation3::Lynnette_User::parse(Social_Media_no_followers::media_
 void TwitterFormulation3::Lynnette_User::enrich_event(Social_Media_no_followers::media_event* me)
 {
 	// add BENDe value to post
-	me->indexes[InteractionItem::item_keys::attributes] = get_bendE();
+	me->indexes[InteractionItem::item_keys::bendE] = get_bendE();
 }
 
 //Add BENDe probability to post
@@ -177,8 +187,10 @@ unsigned int TwitterFormulation3::Lynnette_User::get_bendE()
 {
 	std::vector<int> bendE_probs;
 
+	int currAgentID = id;
+
 	for (int i = 0; i < media().bende_probabilities_network->col_size; i++) {
-		float curr_prob = media().bende_probabilities_network->examine(id, i);
+		float curr_prob = media().bende_probabilities_network->examine(currAgentID, i);
 		float random_number = media().random.uniform();
 
 		if (curr_prob > random_number) {
@@ -209,6 +221,7 @@ Social_Media_no_followers::media_event* TwitterFormulation3::create_post(unsigne
 	for (int i = (int)InteractionItem::item_keys::Lynnette_start + 1; i < (int)InteractionItem::item_keys::Lynnette_end; i++) {
 		post->indexes[(InteractionItem::item_keys)i] = 0;
 	}
+
 
 	return post;
 }

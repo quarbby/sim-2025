@@ -64,14 +64,6 @@ void initializeOutputs(Construct& construct)
 {
 	dynet::ParameterMap outputParams;
 
-	//output_params["model name"] = model_names::TWIT_wf;
-	//output_params["start time"] = "2024-03-12T02:26:00.000Z";
-	//output_params["time conversion to seconds"] = "3600";
-	//output_params["output file"] = attributes::output_json;
-
-	//Output* out = new Output_Events(output_params, construct);
-	//construct.output_manager.add_output(out);
-
 	outputParams.clear();
 	outputParams["network names"] = attributes::retweet_output_network + "," +
 		attributes::replies_output_network + "," +
@@ -91,8 +83,14 @@ void addInteractionItemNames() {
 	InteractionItem::item_names[InteractionItem::item_keys::retweets] = attributes::itemkey_retweets;
 	InteractionItem::item_names[InteractionItem::item_keys::quotes] = attributes::itemkey_quotes;
 	InteractionItem::item_names[InteractionItem::item_keys::reply] = attributes::itemkey_reply;
-	InteractionItem::item_names[InteractionItem::item_keys::attributes] = attributes::itemkey_attributes;
+	InteractionItem::item_names[InteractionItem::item_keys::bendE] = attributes::itemkey_bendE;
 	InteractionItem::item_names[InteractionItem::item_keys::Lynnette_end] = attributes::itemkey_lynnette_end;
+
+	InteractionItem::item_names[InteractionItem::item_keys::BendE_start] = attributes::itemkey_bende_start;
+	InteractionItem::item_names[InteractionItem::item_keys::will_retweet] = attributes::itemkey_willRetweet;
+	InteractionItem::item_names[InteractionItem::item_keys::will_reply] = attributes::itemkey_willReply;
+	InteractionItem::item_names[InteractionItem::item_keys::will_quote] = attributes::itemkey_willQuote;
+	InteractionItem::item_names[InteractionItem::item_keys::BendE_end] = attributes::itemkey_bende_end;
 }
 
 void createOutputNetworks(Construct& construct)
@@ -115,9 +113,9 @@ void createFollowerNet(Construct& construct, Nodeset* agentNodeset, dynet::Param
 	construct.graph_manager.generators.dynetml_generator(generator_params, followerNetwork);
 }
 
-void readAgentAttributeNetworks(Construct& construct, dynet::ParameterMap generator_params, Nodeset* agentNodeset, Nodeset* attributesNodeset)
+void readAgentEngagementNetwork(Construct& construct, dynet::ParameterMap generator_params, Nodeset* agentNodeset, Nodeset* engagementNodeset)
 {
-	Graph<float>* engagementProbabilityNetwork = construct.graph_manager.load_optional(attributes::graph_engagement_probabilities, 0.0f, agentNodeset, dense, attributesNodeset, dense);
+	Graph<float>* engagementProbabilityNetwork = construct.graph_manager.load_optional(attributes::graph_engagement_probabilities, 0.0f, agentNodeset, dense, engagementNodeset, dense);
 	generator_params.clear();
 	generator_params["network name"] = attributes::network_input_engagement;
 	generator_params["file"] = attributes::ora_file_input;
@@ -128,7 +126,10 @@ void readAgentAttributeNetworks(Construct& construct, dynet::ParameterMap genera
 		std::cout << e.what();
 		exit(0);
 	}
+}
 
+void readAgentAttributeNetworks(Construct& construct, dynet::ParameterMap generator_params, Nodeset* agentNodeset, Nodeset* attributesNodeset)
+{
 	Graph<float>* retweetProbabilityNetwork = construct.graph_manager.load_optional(attributes::graph_retweets, 0.0f, agentNodeset, dense, attributesNodeset, dense);
 	generator_params.clear();
 	generator_params["network name"] = attributes::network_input_retweets;

@@ -27,11 +27,13 @@ enum class InteractionItem::item_keys : char {
 	retweets,
 	quotes,
 	reply,
-	attributes,
+	bendE,
 	Lynnette_end,
 
 	BendE_start,
-	bridge,
+	will_retweet,
+	will_reply,
+	will_quote,
 	BendE_end
 
 

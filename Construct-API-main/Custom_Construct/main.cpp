@@ -47,6 +47,7 @@ int main()
 		createFollowerNet(construct, agentNodeset, generatorParams);
 
 		readAgentAttributeNetworks(construct, generatorParams, agentNodeset, attributesNodeset);
+		readAgentEngagementNetwork(construct, generatorParams, agentNodeset, engagementNodeset);
 
 		createOutputNetworks(construct);
 

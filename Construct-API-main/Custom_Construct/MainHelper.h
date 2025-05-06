@@ -28,3 +28,5 @@ void createOutputNetworks(Construct& construct);
 void createFollowerNet(Construct& construct, Nodeset* agentNodeset, dynet::ParameterMap generator_params);
 
 void readAgentAttributeNetworks(Construct& construct, dynet::ParameterMap generator_params, Nodeset* agentNodeset, Nodeset* attribtuesNodeset);
+
+void readAgentEngagementNetwork(Construct& construct, dynet::ParameterMap generator_params, Nodeset* agentNodeset, Nodeset* engagementNodeset);

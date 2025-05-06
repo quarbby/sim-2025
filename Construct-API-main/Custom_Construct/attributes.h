@@ -36,7 +36,6 @@ namespace attributes
 
 	// Nodeset
 	const std::string nodeset_agent = "Agent";
-	const std::string nodeset_attributes = "Attributes";
 	const std::string nodeset_engagement = "Engagement";
 
 	const std::string nodeset_graph_agent = "agent";
@@ -49,9 +48,12 @@ namespace attributes
 	const std::string itemkey_retweets = "retweets";
 	const std::string itemkey_quotes = "quotes";
 	const std::string itemkey_reply = "reply";
-	const std::string itemkey_attributes = "attributes";
+	const std::string itemkey_bendE = "bendE";
 	const std::string itemkey_lynnette_end = "Lynnette_end";
 	
 	const std::string itemkey_bende_start = "BendE_start";
+	const std::string itemkey_willRetweet = "will_retweet";
+	const std::string itemkey_willReply = "will_reply";
+	const std::string itemkey_willQuote = "will_quote";
 	const std::string itemkey_bende_end = "BendE_end";
 }

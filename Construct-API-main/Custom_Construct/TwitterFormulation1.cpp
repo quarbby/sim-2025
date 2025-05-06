@@ -97,7 +97,7 @@ void Lynnette_Twitter::Lynnette_User::parse(Social_Media_no_followers::media_eve
 
 void Lynnette_Twitter::Lynnette_User::enrich_event(Social_Media_no_followers::media_event* me)
 {
-	me->indexes[InteractionItem::item_keys::attributes] = get_user_attributes();
+	me->indexes[InteractionItem::item_keys::bendE] = get_user_attributes();
 }
 
 Lynnette_Twitter::Lynnette_Twitter(const dynet::ParameterMap& parameters, Construct& construct) : Twitter_wf(parameters, construct),
