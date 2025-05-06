@@ -33,8 +33,12 @@ int main()
 		dynet::ParameterMap generatorParams;
 
 		// Initialize nodesets
+		// Project specific
 		Nodeset* agentNodeset = initializeAgentNodeset(construct);
 		Nodeset* attributesNodeset = initializeAttributesNodeset(construct);
+		Nodeset* engagementNodeset = initializeEngagementNodeset(construct);
+
+		// Construct specific
 		Nodeset* knowledgeNodeset = initializeKnowledgeNodeset(construct);
 		Nodeset* timeNodeset = initializeTimeNodeset(construct);
 

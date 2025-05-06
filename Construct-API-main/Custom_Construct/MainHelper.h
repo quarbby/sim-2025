@@ -15,6 +15,8 @@ Nodeset* initializeAgentNodeset(Construct& construct);
 
 Nodeset* initializeAttributesNodeset(Construct& construct);
 
+Nodeset* initializeEngagementNodeset(Construct& construct);
+
 void initializeOutputs(Construct& construct);
 
 void addInteractionItemNames();

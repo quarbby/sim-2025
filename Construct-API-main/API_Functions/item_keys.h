@@ -28,7 +28,11 @@ enum class InteractionItem::item_keys : char {
 	quotes,
 	reply,
 	attributes,
-	Lynnette_end
+	Lynnette_end,
+
+	BendE_start,
+	bridge,
+	BendE_end
 
 
 	//item_key list should not exceed 100 as this is reserved for the emotion nodeset

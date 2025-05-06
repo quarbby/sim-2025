@@ -46,19 +46,18 @@ struct TwitterFormulation3 : public Twitter_wf {
 
 	TwitterFormulation3(const dynet::ParameterMap& parameters, Construct& construct);
 
-	Social_Media_no_followers::media_event* create_post(unsigned int knowledge, unsigned int id) override;
+	Social_Media_no_followers::media_event* create_post(unsigned int knowledgeIndex, unsigned int agentIndex) override;
 
 	Social_Media_no_followers::media_event* create_response(unsigned int id, Social_Media_no_followers::media_event* parentId) override;
 
+	Graph<float>* engagement_probabilities_network = nullptr;
 	Graph<float>* bende_probabilities_network = nullptr;
 	Graph<float>* retweet_attribute_network = nullptr;
 	Graph<float>* reply_attribute_network = nullptr;
 	Graph<float>* quotes_attribute_network = nullptr;
-	Graph<float>* likes_attribute_network = nullptr;
 	Graph<unsigned int>* retweet_output_network = nullptr;
 	Graph<unsigned int>* replies_output_network = nullptr;
 	Graph<unsigned int>* quotes_output_network = nullptr;
-	Graph<unsigned int>* likes_output_network = nullptr;
 
 	void setupNetwork();
 

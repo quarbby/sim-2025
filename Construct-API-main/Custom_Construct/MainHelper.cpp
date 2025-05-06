@@ -46,6 +46,14 @@ Nodeset* initializeAttributesNodeset(Construct& construct)
 
 }
 
+Nodeset* initializeEngagementNodeset(Construct& construct)
+{
+	Nodeset* engagementNodeset = construct.ns_manager.create_nodeset(attributes::nodeset_graph_engagement);
+	engagementNodeset->import_dynetml(attributes::ora_file_input, attributes::nodeset_graph_engagement);
+
+	return engagementNodeset;
+}
+
 void createKnowledgeNet(Construct& construct, Nodeset* agentNodeset, Nodeset* knowledgeNodeset)
 {
 	// default value of knowledge net = true means you know the particular piece of knowledge (or know about the hashtag)
@@ -109,6 +117,18 @@ void createFollowerNet(Construct& construct, Nodeset* agentNodeset, dynet::Param
 
 void readAgentAttributeNetworks(Construct& construct, dynet::ParameterMap generator_params, Nodeset* agentNodeset, Nodeset* attributesNodeset)
 {
+	Graph<float>* engagementProbabilityNetwork = construct.graph_manager.load_optional(attributes::graph_engagement_probabilities, 0.0f, agentNodeset, dense, attributesNodeset, dense);
+	generator_params.clear();
+	generator_params["network name"] = attributes::network_input_engagement;
+	generator_params["file"] = attributes::ora_file_input;
+	try {
+		construct.graph_manager.generators.dynetml_generator(generator_params, engagementProbabilityNetwork);
+	}
+	catch (std::exception e) {
+		std::cout << e.what();
+		exit(0);
+	}
+
 	Graph<float>* retweetProbabilityNetwork = construct.graph_manager.load_optional(attributes::graph_retweets, 0.0f, agentNodeset, dense, attributesNodeset, dense);
 	generator_params.clear();
 	generator_params["network name"] = attributes::network_input_retweets;

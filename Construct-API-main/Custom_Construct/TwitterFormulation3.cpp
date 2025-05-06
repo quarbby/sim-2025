@@ -136,6 +136,7 @@ void TwitterFormulation3::Lynnette_User::parse(Social_Media_no_followers::media_
 
 	if (isPost)
 	{
+		//TODO: Decide what or when to engage - depends on engagement network probability
 
 		unsigned int numBits = media().bende_probabilities_network->col_size;
 		std::vector<int> bende_vector = binaryIntToVector(me->indexes[InteractionItem::item_keys::attributes], numBits);
@@ -162,12 +163,14 @@ void TwitterFormulation3::Lynnette_User::parse(Social_Media_no_followers::media_
 
 }
 
+// do these actions to every media event
 void TwitterFormulation3::Lynnette_User::enrich_event(Social_Media_no_followers::media_event* me)
 {
-	// do this to every event - get a bendE for it
+	// add BENDe value to post
 	me->indexes[InteractionItem::item_keys::attributes] = get_bendE();
 }
 
+//Add BENDe probability to post
 //get person's probability of bendE from matrix
 // row = agent; id is getting from the class it inherits from
 unsigned int TwitterFormulation3::Lynnette_User::get_bendE() 
@@ -199,9 +202,9 @@ Social_Media_with_followers("Twitter", InteractionItem::item_keys::twitter_event
 	}
 }
 
-Social_Media_no_followers::media_event* TwitterFormulation3::create_post(unsigned int knowledge, unsigned int id) 
+Social_Media_no_followers::media_event* TwitterFormulation3::create_post(unsigned int knowledgeIndex, unsigned int agentIndex) 
 {
-	auto post = Social_Media_with_followers::create_post(knowledge, id);
+	Social_Media_with_followers::media_event* post = Social_Media_with_followers::create_post(knowledgeIndex, agentIndex);
 
 	for (int i = (int)InteractionItem::item_keys::Lynnette_start + 1; i < (int)InteractionItem::item_keys::Lynnette_end; i++) {
 		post->indexes[(InteractionItem::item_keys)i] = 0;
@@ -224,6 +227,8 @@ Social_Media_no_followers::media_event* TwitterFormulation3::create_response(uns
 
 void TwitterFormulation3::setupNetwork() 
 {
+	engagement_probabilities_network = construct.graph_manager.load_required(attributes::graph_engagement_probabilities, attributes::nodeset_graph_agent, attributes::nodeset_graph_engagement);
+
 	bende_probabilities_network = construct.graph_manager.load_required(attributes::graph_bende_probabilities, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
 
 	retweet_attribute_network = construct.graph_manager.load_required(attributes::graph_retweets, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);

@@ -23,6 +23,7 @@ namespace attributes
 	const std::string network_input_quotes = "Agent_Attributes_Quote";
 	const std::string network_input_likes = "Agent_Attributes_Likes";
 	const std::string network_input_probabilities = "Agent_Attributes_Probability";
+	const std::string network_input_engagement = "Agent_Engagement_Probability";
 
 	// Input Networks Names - for Construct
 	const std::string graph_agent_attributes = "graph_agent_attributes_network";
@@ -31,13 +32,16 @@ namespace attributes
 	const std::string graph_quotes = "graph_agent_attributes_quotes";
 	const std::string graph_likes = "graph_agent_attributes_likes";
 	const std::string graph_bende_probabilities = "graph_bende_probabilities";
+	const std::string graph_engagement_probabilities = "graph_engagement_probabilities";
 
 	// Nodeset
 	const std::string nodeset_agent = "Agent";
 	const std::string nodeset_attributes = "Attributes";
+	const std::string nodeset_engagement = "Engagement";
 
 	const std::string nodeset_graph_agent = "agent";
 	const std::string nodeset_graph_attributes = "Attributes";
+	const std::string nodeset_graph_engagement = "Engagement";
 
 	// Item key names 
 	const std::string itemkey_lynnette_start = "Lynnette_start";
@@ -48,4 +52,6 @@ namespace attributes
 	const std::string itemkey_attributes = "attributes";
 	const std::string itemkey_lynnette_end = "Lynnette_end";
 	
+	const std::string itemkey_bende_start = "BendE_start";
+	const std::string itemkey_bende_end = "BendE_end";
 }
