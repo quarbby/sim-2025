@@ -11,9 +11,9 @@ namespace attributes
 	const std::string quotes_output_network = "quotes_output_network"; 
 	const std::string likes_output_network = "likes_output_network"; 
 
-	const std::string output_dyxml = "output_events_network.xml"; // for ORA
-	const std::string output_json = "output_events.json";
-	
+	const std::string output_dyxml = "output_events_network"; 
+	const std::string output_posts_json = "output_posts";
+	const std::string output_posts_frequency = "2";
 
  	// Input Networks - from ORA
 	const std::string network_all_communication = "Agent_Agent_All_Communication";
@@ -41,19 +41,4 @@ namespace attributes
 	const std::string nodeset_graph_agent = "agent";
 	const std::string nodeset_graph_attributes = "Attributes";
 	const std::string nodeset_graph_engagement = "Engagement";
-
-	// Item key names 
-	const std::string itemkey_lynnette_start = "Lynnette_start";
-	const std::string itemkey_likes = "likes";
-	const std::string itemkey_retweets = "retweets";
-	const std::string itemkey_quotes = "quotes";
-	const std::string itemkey_reply = "reply";
-	const std::string itemkey_bendE = "bendE";
-	const std::string itemkey_lynnette_end = "Lynnette_end";
-	
-	const std::string itemkey_bende_start = "BendE_start";
-	const std::string itemkey_willRetweet = "will_retweet";
-	const std::string itemkey_willReply = "will_reply";
-	const std::string itemkey_willQuote = "will_quote";
-	const std::string itemkey_bende_end = "BendE_end";
 }

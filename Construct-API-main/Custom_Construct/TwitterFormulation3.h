@@ -1,11 +1,18 @@
 #include "pch.h"
 #include "Output.h"
 #include "SocialMedia.h"
-#include "item_keys.h"
+
 #include <cmath>
+#include <algorithm>
+#include <array>
+#include <utility>
+
+#include "item_keys.h"
 #include "attributes.h"
+#include "bendEmotions.h"
 
 using namespace attributes;
+using namespace bendEmotions;
 
 struct TwitterFormulation3 : public Twitter_wf {
 	struct Lynnette_User : public Social_Media_with_followers::default_media_user
@@ -27,6 +34,8 @@ struct TwitterFormulation3 : public Twitter_wf {
 		void writeToOutputNetwork(std::vector<int> bendEVector, int postAuthor, Graph<unsigned int>* outputNetwork);
 
 		bool compareWithRandom(float sumCorrValue);
+
+		std::pair<float, std::string> findHighestProbability();
 
 		bool does_quote(Social_Media_no_followers::media_event* me);
 

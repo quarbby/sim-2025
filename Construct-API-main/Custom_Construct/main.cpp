@@ -5,7 +5,9 @@
 #include "SocialMedia.h"
 #include "item_keys.h"
 #include <cmath>
+
 #include "attributes.h"
+#include "bendEmotions.h"
 
 #include "MainHelper.h"
 
@@ -14,6 +16,7 @@
 #include "TwitterFormulation3.h"
 
 using namespace attributes;
+using namespace bendEmotions;
 
 #define TWITTERFORMULATION 3
 #define TIME_COUNT 2

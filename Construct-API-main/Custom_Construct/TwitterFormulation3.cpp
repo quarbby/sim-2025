@@ -130,6 +130,33 @@ void TwitterFormulation3::Lynnette_User::writeToOutputNetwork(std::vector<int> b
 	outputNetwork->at(postAuthor, currentTime) += 1;
 }
 
+std::pair<float, std::string> TwitterFormulation3::Lynnette_User::findHighestProbability()
+{
+	float quote_prob = sigmoidActivation(media().engagement_probabilities_network->examine(id, bendEmotions::engagement_isQuote));
+	float reply_prob = sigmoidActivation(media().engagement_probabilities_network->examine(id, bendEmotions::engagement_isReply));
+	float retweet_prob = sigmoidActivation(media().engagement_probabilities_network->examine(id, bendEmotions::engagement_isRetweet));
+
+	std::array<std::pair<float, std::string>, 3> probs = 
+	{ 
+		{
+			{quote_prob, "quote"},
+			{reply_prob, "reply"},
+			{retweet_prob, "retweet"}
+		} 
+	};
+
+	// Find the element with the maximum probability using explicit iterator type
+	std::array<std::pair<float, std::string>, 3>::iterator max_it =
+		std::max_element(probs.begin(), probs.end(),
+		[](const std::pair<float, std::string>& a, const std::pair<float, std::string>& b) 
+	{
+		return a.first < b.first;
+	});
+
+	return *max_it;
+}
+
+
 void TwitterFormulation3::Lynnette_User::parse(Social_Media_no_followers::media_event* me) 
 {
 
@@ -147,12 +174,11 @@ void TwitterFormulation3::Lynnette_User::parse(Social_Media_no_followers::media_
 
 		//Decide what to engage - depends on engagement network probability
 		//Decide whether to engage - depends on the BENDe vector attached to each post
+		//Does only one engagement
 
-		float quote_prob = sigmoidActivation(media().engagement_probabilities_network->examine(id, 0));
-		float reply_prob = sigmoidActivation(media().engagement_probabilities_network->examine(id, 1));
-		float retweet_prob = sigmoidActivation(media().engagement_probabilities_network->examine(id, 2));
-
-		// If want to limit to one engagement only - then find the highest prob
+		std::pair<float, std::string> highestProb = findHighestProbability();
+		float highestProbValue = highestProb.first;
+		std::string highestProbEngagement = highestProb.second;
 
 		if ((quote_prob < random_number) && (does_quote(me)))
 		{
@@ -180,6 +206,9 @@ void TwitterFormulation3::Lynnette_User::enrich_event(Social_Media_no_followers:
 {
 	// add BENDe value to post
 	me->indexes[InteractionItem::item_keys::bendE] = get_bendE();
+
+	// TODO: add each BENDe to post
+
 }
 
 //Add BENDe probability to post
