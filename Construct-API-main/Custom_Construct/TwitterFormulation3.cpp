@@ -139,9 +139,9 @@ std::pair<float, std::string> TwitterFormulation3::Lynnette_User::findHighestPro
 	std::array<std::pair<float, std::string>, 3> probs = 
 	{ 
 		{
-			{quote_prob, "quote"},
-			{reply_prob, "reply"},
-			{retweet_prob, "retweet"}
+			{quote_prob, bendEmotions::itemkey_quotes},
+			{reply_prob, bendEmotions::itemkey_reply},
+			{retweet_prob, bendEmotions::itemkey_retweets}
 		} 
 	};
 
@@ -167,7 +167,7 @@ void TwitterFormulation3::Lynnette_User::parse(Social_Media_no_followers::media_
 		unsigned int postAuthor = me->user;
 		int currAgentID = id;
 
-		float random_number = media().random.uniform();
+		float randomNumber = media().random.uniform();
 
 		unsigned int numBits = media().bende_probabilities_network->col_size;
 		std::vector<int> bende_vector = binaryIntToVector(me->indexes[InteractionItem::item_keys::bendE], numBits);
@@ -180,22 +180,26 @@ void TwitterFormulation3::Lynnette_User::parse(Social_Media_no_followers::media_
 		float highestProbValue = highestProb.first;
 		std::string highestProbEngagement = highestProb.second;
 
-		if ((quote_prob < random_number) && (does_quote(me)))
+		if (highestProbValue < randomNumber)
 		{
-			me->indexes[InteractionItem::item_keys::quotes] += 1;
-			writeToOutputNetwork(bende_vector, postAuthor, media().quotes_output_network);
-		}
-		if ((reply_prob < random_number) && (does_reply(me)))
-		{
-			me->indexes[InteractionItem::item_keys::reply] += 1;
-			writeToOutputNetwork(bende_vector, postAuthor, media().replies_output_network);
-		}
-		if ((retweet_prob < random_number) && (does_retweet(me)))
-		{
-			me->indexes[InteractionItem::item_keys::retweets] += 1;
-			writeToOutputNetwork(bende_vector, postAuthor, media().retweet_output_network);
-		}
+			if ((highestProbEngagement == bendEmotions::itemkey_quotes) && (does_quote(me)))
+			{
+				me->indexes[InteractionItem::item_keys::quotes] += 1;
+				writeToOutputNetwork(bende_vector, postAuthor, media().quotes_output_network);
+			}
 
+			if ((highestProbEngagement == bendEmotions::itemkey_reply) && (does_reply(me)))
+			{
+				me->indexes[InteractionItem::item_keys::reply] += 1;
+				writeToOutputNetwork(bende_vector, postAuthor, media().replies_output_network);
+			}
+
+			if ((highestProbEngagement == bendEmotions::itemkey_retweets) && (does_retweet(me)))
+			{
+				me->indexes[InteractionItem::item_keys::retweets] += 1;
+				writeToOutputNetwork(bende_vector, postAuthor, media().retweet_output_network);
+			}
+		}
 
 	}
 
