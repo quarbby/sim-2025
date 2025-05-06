@@ -147,9 +147,9 @@ void TwitterFormulation3::Lynnette_User::parse(Social_Media_no_followers::media_
 		//Decide what to engage - depends on engagement network probability
 		//Decide whether to engage - depends on the BENDe vector attached to each post
 
-		float quote_prob = media().engagement_probabilities_network->examine(id, 0);
-		float reply_prob = media().engagement_probabilities_network->examine(id, 1);
-		float retweet_prob = media().engagement_probabilities_network->examine(id, 2);
+		float quote_prob = sigmoidActivation(media().engagement_probabilities_network->examine(id, 0));
+		float reply_prob = sigmoidActivation(media().engagement_probabilities_network->examine(id, 1));
+		float retweet_prob = sigmoidActivation(media().engagement_probabilities_network->examine(id, 2));
 
 		// If want to limit to one engagement only - then find the highest prob
 
