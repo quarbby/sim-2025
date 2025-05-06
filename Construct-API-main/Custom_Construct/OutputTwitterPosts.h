@@ -29,18 +29,25 @@ struct OutputTwitterPosts : public Output {
 
 		//TODO: Add BENDe
 
-		static constexpr const char* tabs = "\t\t\t";
-		_output_file << "\"current timestep\", " << current_timestep << COMMA_END;
-		_output_file << "\"timestep created\", " << msg.time_stamp << COMMA_END;
-		_output_file << "\"user\", \"" << msg.user << "\"" << COMMA_END;
-		_output_file << "\"last used\", " << msg.last_used << COMMA_END;
-		_output_file << "\"num_quotes\", " << msg.indexes.find(InteractionItem::item_keys::quotes)->second << COMMA_END;
-		_output_file << "\"num_reply\", " << msg.indexes.find(InteractionItem::item_keys::reply)->second << COMMA_END;
-		_output_file << "\"num_retweets\", " << msg.indexes.find(InteractionItem::item_keys::retweets)->second << COMMA_END;
+		static bool headers_written = false;
 
-		_output_file << "\"parent_event\", " << msg.parent_event << COMMA_END;
-		_output_file << "\"root_event\", " << msg.root_event << COMMA_END;
-		_output_file << "\"id\", " << &msg << std::endl;
+		if (!headers_written) {
+			// Write CSV header row
+			_output_file << "current_timestep,timestep_created,user,last_used,num_quotes,num_reply,"
+				<< "num_retweets,parent_event,root_event,id" << std::endl;
+			headers_written = true;
+		}
+
+		_output_file << current_timestep << COMMA_END
+			<< msg.time_stamp << COMMA_END
+			<< msg.user << COMMA_END
+			<< msg.last_used << COMMA_END
+			<< msg.indexes.find(InteractionItem::item_keys::quotes)->second << COMMA_END
+			<< msg.indexes.find(InteractionItem::item_keys::reply)->second << COMMA_END
+			<< msg.indexes.find(InteractionItem::item_keys::retweets)->second << COMMA_END
+			<< msg.parent_event << COMMA_END
+			<< msg.root_event << COMMA_END
+			<< &msg << std::endl;
 
 	}
 
@@ -62,11 +69,16 @@ struct OutputTwitterPosts : public Output {
 		media_events = get_event_list(params, construct);
 
 		std::string file = params.get_parameter(output_file);
-		if (file.size() <= 4 || ".csv" != file.substr(file.size() - 4, 4)) {
+
+		if (file.size() <= 4 || ".csv" != file.substr(file.size() - 4, 4)) 
+		{
 			throw dynet::wrong_file_extension(output_file, ".csv");
 		}
 
-		if (construct.working_directory != "") file = construct.working_directory + dynet::seperator() + file;
+		if (construct.working_directory != "")
+		{
+			file = construct.working_directory + dynet::seperator() + file;
+		}
 
 		_output_file.open(file);
 

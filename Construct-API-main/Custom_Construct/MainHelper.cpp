@@ -85,7 +85,7 @@ void initializeOutputs(Construct& construct)
 	construct.output_manager.add_output(out);
 
 	outputParams.clear();
-	outputParams["output file"] = attributes::output_posts_json + datetimeString + ".json";
+	outputParams["output file"] = attributes::output_posts_json + datetimeString + ".csv";
 	outputParams["frequency"] = attributes::output_posts_frequency;
 	OutputTwitterPosts* m_OutputTwitterPosts = new OutputTwitterPosts(outputParams, construct);
 	construct.output_manager.add_output(m_OutputTwitterPosts);
