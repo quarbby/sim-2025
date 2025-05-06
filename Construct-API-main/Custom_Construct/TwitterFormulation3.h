@@ -45,7 +45,7 @@ struct TwitterFormulation3 : public Twitter_wf {
 
 		void parse(Social_Media_no_followers::media_event* me) override;
 
-		unsigned int get_bendE();
+		std::vector<int> get_bendE();
 
 		void enrich_event(Social_Media_no_followers::media_event* me) override;
 
