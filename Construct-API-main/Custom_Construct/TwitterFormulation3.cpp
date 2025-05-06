@@ -208,17 +208,36 @@ void TwitterFormulation3::Lynnette_User::parse(Social_Media_no_followers::media_
 // do these actions to every media event
 void TwitterFormulation3::Lynnette_User::enrich_event(Social_Media_no_followers::media_event* me)
 {
-	// add BENDe value to post
-	me->indexes[InteractionItem::item_keys::bendE] = get_bendE();
+	// get a BENDe value from probabilities of each post
+	std::vector<int> bendE_probs = get_bendE();
+	unsigned int binary_rep = vector_to_binary_int(bendE_probs);
 
-	// TODO: add each BENDe to post
+	me->indexes[InteractionItem::item_keys::bendE] = binary_rep;
+
+	// add presence of each BENDe to post
+	// Note: bendESet starts from 0, itemkeys starts from higher index
+
+	std::unordered_set<int> bendESet(bendE_probs.begin(), bendE_probs.end());
+	int bendEBase = (int)InteractionItem::item_keys::BendE_start + 1;
+
+	for (int i = bendEBase; i < (int)InteractionItem::item_keys::BendE_end; ++i)
+	{
+		int relative_index = i - bendEBase;
+
+		if (bendESet.count(relative_index)) {
+			me->indexes[(InteractionItem::item_keys)i] = 1;
+		}
+		else {
+			me->indexes[(InteractionItem::item_keys)i] = 0;
+		}
+	}
 
 }
 
-//Add BENDe probability to post
 //get person's probability of bendE from matrix
+//decide for each bende whether it will be present or not in the post by comparison with random number
 // row = agent; id is getting from the class it inherits from
-unsigned int TwitterFormulation3::Lynnette_User::get_bendE() 
+std::vector<int> TwitterFormulation3::Lynnette_User::get_bendE()
 {
 	std::vector<int> bendE_probs;
 
@@ -229,13 +248,12 @@ unsigned int TwitterFormulation3::Lynnette_User::get_bendE()
 		float random_number = media().random.uniform();
 
 		if (curr_prob > random_number) {
+			// stores the index of the activated bendE
 			bendE_probs.push_back(i);
 		}
 	}
 
-	unsigned int binary_rep = vector_to_binary_int(bendE_probs);
-
-	return binary_rep;
+	return bendE_probs;
 }
 
 TwitterFormulation3::TwitterFormulation3(const dynet::ParameterMap& parameters, Construct& construct) : Twitter_wf(parameters, construct),
