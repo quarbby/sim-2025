@@ -43,7 +43,6 @@ struct TwitterFormulation3 : public Twitter_wf {
 		Social_Media_with_followers* m_Media = nullptr;
 	};
 
-
 	TwitterFormulation3(const dynet::ParameterMap& parameters, Construct& construct);
 
 	Social_Media_no_followers::media_event* create_post(unsigned int knowledgeIndex, unsigned int agentIndex) override;

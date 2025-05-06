@@ -5,6 +5,7 @@
 #include <cmath>
 #include "attributes.h"
 #include "MainHelper.h"
+#include "OutputTwitterPosts.h"
 
 using namespace attributes;
 
@@ -75,6 +76,14 @@ void initializeOutputs(Construct& construct)
 	
 	Output* out = new Output_dynetml(outputParams, construct);
 	construct.output_manager.add_output(out);
+
+	// TODO: Abstract magic strings out, add the timeframe
+
+	outputParams.clear();
+	outputParams["output file"] = "posts_output.json";
+	outputParams["frequency"] = "1";
+	OutputTwitterPosts* m_OutputTwitterPosts = new OutputTwitterPosts(outputParams, construct);
+	construct.output_manager.add_output(m_OutputTwitterPosts);
 }
 
 void addInteractionItemNames() {

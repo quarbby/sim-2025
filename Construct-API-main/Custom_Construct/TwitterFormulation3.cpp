@@ -132,6 +132,7 @@ void TwitterFormulation3::Lynnette_User::writeToOutputNetwork(std::vector<int> b
 
 void TwitterFormulation3::Lynnette_User::parse(Social_Media_no_followers::media_event* me) 
 {
+
 	bool isPost = (me->type == Social_Media_no_followers::media_event::event_type::post);
 
 	if (isPost)
@@ -168,6 +169,7 @@ void TwitterFormulation3::Lynnette_User::parse(Social_Media_no_followers::media_
 			me->indexes[InteractionItem::item_keys::retweets] += 1;
 			writeToOutputNetwork(bende_vector, postAuthor, media().retweet_output_network);
 		}
+
 
 	}
 
@@ -228,7 +230,7 @@ Social_Media_no_followers::media_event* TwitterFormulation3::create_post(unsigne
 
 Social_Media_no_followers::media_event* TwitterFormulation3::create_response(unsigned int id, Social_Media_no_followers::media_event* parentId)
 {
-	auto post = Social_Media_with_followers::create_response(id, parentId);
+	Social_Media_with_followers::media_event* post = Social_Media_with_followers::create_response(id, parentId);
 
 	for (int i = (int)InteractionItem::item_keys::Lynnette_start + 1; i < (int)InteractionItem::item_keys::Lynnette_end; i++) {
 		post->indexes[(InteractionItem::item_keys)i] = 0;

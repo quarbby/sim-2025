@@ -36,6 +36,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\API_Functions\item_keys.h" />
+    <ClInclude Include="OutputTwitterPosts.h" />
     <ClInclude Include="TwitterFormulation1.h" />
     <ClInclude Include="TwitterFormulation2.h" />
     <ClInclude Include="TwitterFormulation3.h" />
