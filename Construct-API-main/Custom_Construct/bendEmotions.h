@@ -13,6 +13,7 @@ namespace bendEmotions
 
 	const std::string itemkey_bende_start = "BendE_start";
 	const std::string itemkey_back = "back";
+	const std::string itemkey_build = "build";
 	const std::string itemkey_bridge = "bridge";
 	const std::string itemkey_boost = "boost";
 	const std::string itemkey_excite = "excite";
@@ -31,7 +32,7 @@ namespace bendEmotions
 	const std::string itemkey_fear = "fear";
 	const std::string itemkey_anger = "anger";
 	const std::string itemkey_happy = "happy";
-	const std::string itemkey_disgust_emotion = "disgust_emotion";
+	const std::string itemkey_disgust = "disgust";
 	const std::string itemkey_surprise = "surprise";
 	const std::string itemkey_bende_end = "BendE_end";
 

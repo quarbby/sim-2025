@@ -32,6 +32,7 @@ enum class InteractionItem::item_keys : char {
 
 	BendE_start,
 	back,
+	build,
 	bridge,
 	boost,
 	excite,

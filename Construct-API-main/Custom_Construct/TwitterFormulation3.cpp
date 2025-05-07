@@ -75,36 +75,35 @@ bool TwitterFormulation3::Lynnette_User::compareWithRandom(float sumCorrValue)
 float TwitterFormulation3::Lynnette_User::getSumCorrValue(std::vector<int> bendEVector, Graph<float> *attributeNetwork)
 {
 	float sumCorrValue = 0;
+	int currAgentID = id;
+
 	for (int i : bendEVector)
 	{
-		float corr_value = attributeNetwork->examine(id, i);
+		float corr_value = attributeNetwork->examine(currAgentID, i);
 		sumCorrValue += corr_value;
 	}
 
 	return sumCorrValue;
 }
 
-bool TwitterFormulation3::Lynnette_User::does_quote(Social_Media_no_followers::media_event* me)
+bool TwitterFormulation3::Lynnette_User::does_quote(Social_Media_no_followers::media_event* me, std::vector<int> bende_vector)
 {
-	std::vector<int> bende_vector = getBendEProbs(me);
 	float sum_corr_value = getSumCorrValue(bende_vector, media().quotes_attribute_network);
 	bool isQuote = compareWithRandom(sum_corr_value);
 
 	return isQuote;
 }
 
-bool TwitterFormulation3::Lynnette_User::does_reply(Social_Media_no_followers::media_event* me)
+bool TwitterFormulation3::Lynnette_User::does_reply(Social_Media_no_followers::media_event* me, std::vector<int> bende_vector)
 {
-	std::vector<int> bende_vector = getBendEProbs(me);
 	float sum_corr_value = getSumCorrValue(bende_vector, media().reply_attribute_network);
 	bool isReply = compareWithRandom(sum_corr_value);
 
 	return isReply;
 }
 
-bool TwitterFormulation3::Lynnette_User::does_retweet(Social_Media_no_followers::media_event* me)
+bool TwitterFormulation3::Lynnette_User::does_retweet(Social_Media_no_followers::media_event* me, std::vector<int> bende_vector)
 {
-	std::vector<int> bende_vector = getBendEProbs(me);
 	float sum_corr_value = getSumCorrValue(bende_vector, media().retweet_attribute_network);
 	bool isRetweet = compareWithRandom(sum_corr_value);
 
@@ -182,19 +181,19 @@ void TwitterFormulation3::Lynnette_User::parse(Social_Media_no_followers::media_
 
 		if (highestProbValue < randomNumber)
 		{
-			if ((highestProbEngagement == bendEmotions::itemkey_quotes) && (does_quote(me)))
+			if ((highestProbEngagement == bendEmotions::itemkey_quotes) && (does_quote(me, bende_vector)))
 			{
 				me->indexes[InteractionItem::item_keys::quotes] += 1;
 				writeToOutputNetwork(bende_vector, postAuthor, media().quotes_output_network);
 			}
 
-			if ((highestProbEngagement == bendEmotions::itemkey_reply) && (does_reply(me)))
+			if ((highestProbEngagement == bendEmotions::itemkey_reply) && (does_reply(me, bende_vector)))
 			{
 				me->indexes[InteractionItem::item_keys::reply] += 1;
 				writeToOutputNetwork(bende_vector, postAuthor, media().replies_output_network);
 			}
 
-			if ((highestProbEngagement == bendEmotions::itemkey_retweets) && (does_retweet(me)))
+			if ((highestProbEngagement == bendEmotions::itemkey_retweets) && (does_retweet(me, bende_vector)))
 			{
 				me->indexes[InteractionItem::item_keys::retweets] += 1;
 				writeToOutputNetwork(bende_vector, postAuthor, media().retweet_output_network);

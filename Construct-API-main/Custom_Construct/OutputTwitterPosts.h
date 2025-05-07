@@ -34,20 +34,53 @@ struct OutputTwitterPosts : public Output {
 		if (!headers_written) {
 			// Write CSV header row
 			_output_file << "current_timestep,timestep_created,user,last_used,num_quotes,num_reply,"
-				<< "num_retweets,parent_event,root_event,id" << std::endl;
+				<< "num_retweets,parent_event,root_event,msg_id" << std::endl;
+
+			_output_file << "current_timestep,msg_id,timestep_created,user,parent_event,root_event,last_used,num_quotes,num_reply,num_retweets,back_present,build_present,bridge_present,boost_present,excite_present,engage_present,explain_present,enhance_present,neutralize_present,negate_present,narrow_present,neglect_present,dismay_present,dismiss_present,distort_present,distract_present,sad_present,fear_present,anger_present,happy_present,disgust_present,surprise_present" << std::endl;
+
 			headers_written = true;
 		}
 
 		_output_file << current_timestep << COMMA_END
+			<< &msg << COMMA_END
 			<< msg.time_stamp << COMMA_END
 			<< msg.user << COMMA_END
+			<< msg.parent_event << COMMA_END
+			<< msg.root_event << COMMA_END
 			<< msg.last_used << COMMA_END
+
 			<< msg.indexes.find(InteractionItem::item_keys::quotes)->second << COMMA_END
 			<< msg.indexes.find(InteractionItem::item_keys::reply)->second << COMMA_END
 			<< msg.indexes.find(InteractionItem::item_keys::retweets)->second << COMMA_END
-			<< msg.parent_event << COMMA_END
-			<< msg.root_event << COMMA_END
-			<< &msg << std::endl;
+
+			<< msg.indexes.find(InteractionItem::item_keys::back)->second << COMMA_END
+			<< msg.indexes.find(InteractionItem::item_keys::build)->second << COMMA_END
+			<< msg.indexes.find(InteractionItem::item_keys::bridge)->second << COMMA_END
+			<< msg.indexes.find(InteractionItem::item_keys::boost)->second << COMMA_END
+
+			<< msg.indexes.find(InteractionItem::item_keys::excite)->second << COMMA_END
+			<< msg.indexes.find(InteractionItem::item_keys::engage)->second << COMMA_END
+			<< msg.indexes.find(InteractionItem::item_keys::explain)->second << COMMA_END
+			<< msg.indexes.find(InteractionItem::item_keys::enhance)->second << COMMA_END
+
+			<< msg.indexes.find(InteractionItem::item_keys::neutralize)->second << COMMA_END
+			<< msg.indexes.find(InteractionItem::item_keys::negate)->second << COMMA_END
+			<< msg.indexes.find(InteractionItem::item_keys::narrow)->second << COMMA_END
+			<< msg.indexes.find(InteractionItem::item_keys::neglect)->second << COMMA_END
+
+			<< msg.indexes.find(InteractionItem::item_keys::dismay)->second << COMMA_END
+			<< msg.indexes.find(InteractionItem::item_keys::dismiss)->second << COMMA_END
+			<< msg.indexes.find(InteractionItem::item_keys::distort)->second << COMMA_END
+			<< msg.indexes.find(InteractionItem::item_keys::distract)->second << COMMA_END
+
+			<< msg.indexes.find(InteractionItem::item_keys::sad)->second << COMMA_END
+			<< msg.indexes.find(InteractionItem::item_keys::fear)->second << COMMA_END
+			<< msg.indexes.find(InteractionItem::item_keys::anger)->second << COMMA_END
+			<< msg.indexes.find(InteractionItem::item_keys::happy)->second << COMMA_END
+			<< msg.indexes.find(InteractionItem::item_keys::disgust)->second << COMMA_END
+			<< msg.indexes.find(InteractionItem::item_keys::surprise)->second << COMMA_END
+
+			<< std::endl;
 
 	}
 

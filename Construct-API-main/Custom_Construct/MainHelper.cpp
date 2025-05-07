@@ -101,27 +101,34 @@ void addInteractionItemNames() {
 	InteractionItem::item_names[InteractionItem::item_keys::Lynnette_end] = bendEmotions::itemkey_lynnette_end;
 
 	InteractionItem::item_names[InteractionItem::item_keys::BendE_start] = bendEmotions::itemkey_bende_start;
+
 	InteractionItem::item_names[InteractionItem::item_keys::back] = bendEmotions::itemkey_back;
+	InteractionItem::item_names[InteractionItem::item_keys::build] = bendEmotions::itemkey_build;
 	InteractionItem::item_names[InteractionItem::item_keys::bridge] = bendEmotions::itemkey_bridge;
 	InteractionItem::item_names[InteractionItem::item_keys::boost] = bendEmotions::itemkey_boost;
+
 	InteractionItem::item_names[InteractionItem::item_keys::excite] = bendEmotions::itemkey_excite;
 	InteractionItem::item_names[InteractionItem::item_keys::engage] = bendEmotions::itemkey_engage;
 	InteractionItem::item_names[InteractionItem::item_keys::explain] = bendEmotions::itemkey_explain;
 	InteractionItem::item_names[InteractionItem::item_keys::enhance] = bendEmotions::itemkey_enhance;
+
 	InteractionItem::item_names[InteractionItem::item_keys::neutralize] = bendEmotions::itemkey_neutralize;
 	InteractionItem::item_names[InteractionItem::item_keys::negate] = bendEmotions::itemkey_negate;
 	InteractionItem::item_names[InteractionItem::item_keys::narrow] = bendEmotions::itemkey_narrow;
 	InteractionItem::item_names[InteractionItem::item_keys::neglect] = bendEmotions::itemkey_neglect;
+
 	InteractionItem::item_names[InteractionItem::item_keys::dismay] = bendEmotions::itemkey_dismay;
 	InteractionItem::item_names[InteractionItem::item_keys::dismiss] = bendEmotions::itemkey_dismiss;
 	InteractionItem::item_names[InteractionItem::item_keys::distort] = bendEmotions::itemkey_distort;
 	InteractionItem::item_names[InteractionItem::item_keys::distract] = bendEmotions::itemkey_distract;
+
 	InteractionItem::item_names[InteractionItem::item_keys::sad] = bendEmotions::itemkey_sad;
 	InteractionItem::item_names[InteractionItem::item_keys::fear] = bendEmotions::itemkey_fear;
 	InteractionItem::item_names[InteractionItem::item_keys::anger] = bendEmotions::itemkey_anger;
 	InteractionItem::item_names[InteractionItem::item_keys::happy] = bendEmotions::itemkey_happy;
-	InteractionItem::item_names[InteractionItem::item_keys::disgust_emotion] = bendEmotions::itemkey_disgust_emotion;
+	InteractionItem::item_names[InteractionItem::item_keys::disgust] = bendEmotions::itemkey_disgust;
 	InteractionItem::item_names[InteractionItem::item_keys::surprise] = bendEmotions::itemkey_surprise;
+
 	InteractionItem::item_names[InteractionItem::item_keys::BendE_end] = bendEmotions::itemkey_bende_end;
 }
 

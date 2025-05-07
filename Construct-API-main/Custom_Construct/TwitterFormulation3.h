@@ -37,11 +37,11 @@ struct TwitterFormulation3 : public Twitter_wf {
 
 		std::pair<float, std::string> findHighestProbability();
 
-		bool does_quote(Social_Media_no_followers::media_event* me);
+		bool does_quote(Social_Media_no_followers::media_event* me, std::vector<int> bende_vector);
 
-		bool does_reply(Social_Media_no_followers::media_event* me);
+		bool does_reply(Social_Media_no_followers::media_event* me, std::vector<int> bende_vector);
 
-		bool does_retweet(Social_Media_no_followers::media_event* me);
+		bool does_retweet(Social_Media_no_followers::media_event* me, std::vector<int> bende_vector);
 
 		void parse(Social_Media_no_followers::media_event* me) override;
 
