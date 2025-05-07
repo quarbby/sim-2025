@@ -110,7 +110,7 @@ bool TwitterFormulation3::Lynnette_User::does_retweet(Social_Media_no_followers:
 	return isRetweet;
 }
 
-void TwitterFormulation3::Lynnette_User::writeToOutputNetwork(std::vector<int> bendEVector, int postAuthor, Graph<unsigned int>* outputNetwork)
+void TwitterFormulation3::Lynnette_User::writeToOutputNetwork(std::vector<int> bendEVector, int postAuthor, Graph<unsigned int>* engagementReceivedNetwork, Graph<unsigned int>* engagementGivenNetwork)
 {
 	// TODO: Figure out which is correct
 
@@ -123,17 +123,42 @@ void TwitterFormulation3::Lynnette_User::writeToOutputNetwork(std::vector<int> b
 	// add 1 at (postAuthor, currentTime)
 
 	// I wrote this 
-	float currTimeFloat = m_Media->time;
+	int currTime = m_Media->time;
+	int frequencyInt = std::stoi(attributes::output_posts_frequency);
 
-	int currentTime = currTimeFloat;
-	outputNetwork->at(postAuthor, currentTime) += 1;
+	int currAuthorID = id;
+
+	// Write to output network every n timestep
+	if (currTime % frequencyInt == 0.0)
+	{
+		engagementReceivedNetwork->at(postAuthor, currTime) += 1;
+
+		engagementGivenNetwork->at(currAuthorID, currTime) += 1;
+	}
+
+
+}
+
+float TwitterFormulation3::Lynnette_User::getEngagementProb(int engagementType)
+{
+	float engagementProb = sigmoidActivation(media().engagement_probabilities_network->examine(id, engagementType));
+
+	if (engagementProb == 0)
+	{
+		engagementProb = media().random.uniform();
+	}
+
+	return engagementProb;
+
 }
 
 std::pair<float, std::string> TwitterFormulation3::Lynnette_User::findHighestProbability()
 {
-	float quote_prob = sigmoidActivation(media().engagement_probabilities_network->examine(id, bendEmotions::engagement_isQuote));
-	float reply_prob = sigmoidActivation(media().engagement_probabilities_network->examine(id, bendEmotions::engagement_isReply));
-	float retweet_prob = sigmoidActivation(media().engagement_probabilities_network->examine(id, bendEmotions::engagement_isRetweet));
+	float quote_prob = getEngagementProb(bendEmotions::engagement_isQuote);
+	float reply_prob = getEngagementProb(bendEmotions::engagement_isReply);
+	float retweet_prob = getEngagementProb(bendEmotions::engagement_isRetweet);
+
+	// looks like highest value now is always quotes - randomise it? 
 
 	std::array<std::pair<float, std::string>, 3> probs = 
 	{ 
@@ -184,19 +209,19 @@ void TwitterFormulation3::Lynnette_User::parse(Social_Media_no_followers::media_
 			if ((highestProbEngagement == bendEmotions::itemkey_quotes) && (does_quote(me, bende_vector)))
 			{
 				me->indexes[InteractionItem::item_keys::quotes] += 1;
-				writeToOutputNetwork(bende_vector, postAuthor, media().quotes_output_network);
+				writeToOutputNetwork(bende_vector, postAuthor, media().quotes_received_network, media().quotes_given_network);
 			}
 
 			if ((highestProbEngagement == bendEmotions::itemkey_reply) && (does_reply(me, bende_vector)))
 			{
 				me->indexes[InteractionItem::item_keys::reply] += 1;
-				writeToOutputNetwork(bende_vector, postAuthor, media().replies_output_network);
+				writeToOutputNetwork(bende_vector, postAuthor, media().replies_received_network, media().replies_given_network);
 			}
 
 			if ((highestProbEngagement == bendEmotions::itemkey_retweets) && (does_retweet(me, bende_vector)))
 			{
 				me->indexes[InteractionItem::item_keys::retweets] += 1;
-				writeToOutputNetwork(bende_vector, postAuthor, media().retweet_output_network);
+				writeToOutputNetwork(bende_vector, postAuthor, media().retweet_received_network, media().retweet_given_network);
 			}
 		}
 
@@ -244,9 +269,15 @@ std::vector<int> TwitterFormulation3::Lynnette_User::get_bendE()
 
 	for (int i = 0; i < media().bende_probabilities_network->col_size; i++) {
 		float curr_prob = media().bende_probabilities_network->examine(currAgentID, i);
+		if (curr_prob == 0)
+		{
+			curr_prob = media().random.uniform();
+		}
+
 		float random_number = media().random.uniform();
 
-		if (curr_prob > random_number) {
+		if (curr_prob > random_number) 
+		{
 			// stores the index of the activated bendE
 			bendE_probs.push_back(i);
 		}
@@ -302,9 +333,17 @@ void TwitterFormulation3::setupNetwork()
 
 	quotes_attribute_network = construct.graph_manager.load_required(attributes::graph_quotes, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
 
-	retweet_output_network = construct.graph_manager.load_required(attributes::retweet_output_network, attributes::nodeset_graph_agent, nodeset_names::time);
 
-	replies_output_network = construct.graph_manager.load_required(attributes::replies_output_network, attributes::nodeset_graph_agent, nodeset_names::time);
+	retweet_given_network = construct.graph_manager.load_required(attributes::retweet_given_network, attributes::nodeset_graph_agent, nodeset_names::time);
 
-	quotes_output_network = construct.graph_manager.load_required(attributes::quotes_output_network, attributes::nodeset_graph_agent, nodeset_names::time);
+	replies_given_network = construct.graph_manager.load_required(attributes::replies_given_network, attributes::nodeset_graph_agent, nodeset_names::time);
+
+	quotes_given_network = construct.graph_manager.load_required(attributes::quotes_given_network, attributes::nodeset_graph_agent, nodeset_names::time);
+
+
+	retweet_received_network = construct.graph_manager.load_required(attributes::retweet_received_network, attributes::nodeset_graph_agent, nodeset_names::time);
+
+	replies_received_network = construct.graph_manager.load_required(attributes::replies_received_network, attributes::nodeset_graph_agent, nodeset_names::time);
+
+	quotes_received_network = construct.graph_manager.load_required(attributes::quotes_received_network, attributes::nodeset_graph_agent, nodeset_names::time);
 }

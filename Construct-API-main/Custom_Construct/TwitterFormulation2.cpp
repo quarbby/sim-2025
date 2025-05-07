@@ -132,12 +132,12 @@ void TwitterFormulation2::setupNetwork()
 
 	likesAttributeNetwork = construct.graph_manager.load_optional(attributes::graph_likes, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
 
-	retweetOutputNetwork = construct.graph_manager.load_required(attributes::retweet_output_network, attributes::nodeset_graph_agent, nodeset_names::time);
+	retweetOutputNetwork = construct.graph_manager.load_required(attributes::retweet_given_network, attributes::nodeset_graph_agent, nodeset_names::time);
 
-	repliesOutputNetwork = construct.graph_manager.load_required(attributes::replies_output_network, attributes::nodeset_graph_agent, nodeset_names::time);
+	repliesOutputNetwork = construct.graph_manager.load_required(attributes::replies_given_network, attributes::nodeset_graph_agent, nodeset_names::time);
 
-	quotesOutputNetwork = construct.graph_manager.load_required(attributes::quotes_output_network, attributes::nodeset_graph_agent, nodeset_names::time);
+	quotesOutputNetwork = construct.graph_manager.load_required(attributes::quotes_given_network, attributes::nodeset_graph_agent, nodeset_names::time);
 
-	likesOutputNetwork = construct.graph_manager.load_required(attributes::likes_output_network, attributes::nodeset_graph_agent, nodeset_names::time);
+	likesOutputNetwork = construct.graph_manager.load_required(attributes::likes_given_network, attributes::nodeset_graph_agent, nodeset_names::time);
 
 }

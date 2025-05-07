@@ -4,12 +4,17 @@ namespace attributes
 {
 	// Input file
 	const std::string ora_file_input = "twitter_truncated_for_construct_normalized_full.xml";
+	const int timecount = 6;
 
 	// Output Stuff - from Construct
-	const std::string retweet_output_network = "retweet_output_network"; 
-	const std::string replies_output_network = "replies_output_network"; 
-	const std::string quotes_output_network = "quotes_output_network"; 
-	const std::string likes_output_network = "likes_output_network"; 
+	const std::string retweet_given_network = "retweet_given_network";
+	const std::string replies_given_network = "replies_given_network";
+	const std::string quotes_given_network = "quotes_given_network";
+	const std::string likes_given_network = "likes_given_network";
+
+	const std::string retweet_received_network = "retweet_received_network";
+	const std::string replies_received_network = "replies_received_network";
+	const std::string quotes_received_network = "quotes_received_network";
 
 	const std::string output_dyxml = "output_events_network"; 
 	const std::string output_posts_json = "output_posts";

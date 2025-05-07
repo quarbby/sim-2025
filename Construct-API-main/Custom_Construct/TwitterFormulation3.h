@@ -31,9 +31,11 @@ struct TwitterFormulation3 : public Twitter_wf {
 
 		float getSumCorrValue(std::vector<int> bendEVector, Graph<float> *attributeNetwork);
 
-		void writeToOutputNetwork(std::vector<int> bendEVector, int postAuthor, Graph<unsigned int>* outputNetwork);
+		void writeToOutputNetwork(std::vector<int> bendEVector, int postAuthor, Graph<unsigned int>* engagementReceivedNetwork, Graph<unsigned int>* engagementGivenNetwork);
 
 		bool compareWithRandom(float sumCorrValue);
+
+		float getEngagementProb(int engagementType);
 
 		std::pair<float, std::string> findHighestProbability();
 
@@ -63,9 +65,14 @@ struct TwitterFormulation3 : public Twitter_wf {
 	Graph<float>* retweet_attribute_network = nullptr;
 	Graph<float>* reply_attribute_network = nullptr;
 	Graph<float>* quotes_attribute_network = nullptr;
-	Graph<unsigned int>* retweet_output_network = nullptr;
-	Graph<unsigned int>* replies_output_network = nullptr;
-	Graph<unsigned int>* quotes_output_network = nullptr;
+
+	Graph<unsigned int>* retweet_given_network = nullptr;
+	Graph<unsigned int>* replies_given_network = nullptr;
+	Graph<unsigned int>* quotes_given_network = nullptr;
+
+	Graph<unsigned int>* retweet_received_network = nullptr;
+	Graph<unsigned int>* replies_received_network = nullptr;
+	Graph<unsigned int>* quotes_received_network = nullptr;
 
 	void setupNetwork();
 

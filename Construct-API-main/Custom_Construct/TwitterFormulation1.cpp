@@ -130,11 +130,11 @@ void Lynnette_Twitter::setupNetwork()
 {
 	agent_attribute_network = construct.graph_manager.load_required(attributes::graph_agent_attributes, attributes::nodeset_graph_agent, attributes::nodeset_graph_attributes);
 
-	retweet_output_network = construct.graph_manager.load_required(attributes::retweet_output_network, attributes::nodeset_graph_agent, nodeset_names::time);
+	retweet_output_network = construct.graph_manager.load_required(attributes::retweet_given_network, attributes::nodeset_graph_agent, nodeset_names::time);
 
-	replies_output_network = construct.graph_manager.load_required(attributes::replies_output_network, attributes::nodeset_graph_agent, nodeset_names::time);
+	replies_output_network = construct.graph_manager.load_required(attributes::replies_given_network, attributes::nodeset_graph_agent, nodeset_names::time);
 
-	quotes_output_network = construct.graph_manager.load_required(attributes::quotes_output_network, attributes::nodeset_graph_agent, nodeset_names::time);
+	quotes_output_network = construct.graph_manager.load_required(attributes::quotes_given_network, attributes::nodeset_graph_agent, nodeset_names::time);
 
-	likes_output_network = construct.graph_manager.load_required(attributes::likes_output_network, attributes::nodeset_graph_agent, nodeset_names::time);
+	likes_output_network = construct.graph_manager.load_required(attributes::likes_given_network, attributes::nodeset_graph_agent, nodeset_names::time);
 }

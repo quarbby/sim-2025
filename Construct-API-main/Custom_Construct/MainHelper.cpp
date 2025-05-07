@@ -14,6 +14,7 @@
 using namespace attributes;
 
 const int KNOWLEDGE_COUNT = 5;
+const std::string COMMA = ",";
 
 Nodeset* initializeKnowledgeNodeset(Construct& construct)
 {
@@ -73,10 +74,14 @@ void initializeOutputs(Construct& construct)
 	std::string datetimeString = std::format("_{:%Y-%m-%d_%H%M}", currentTime);
 
 	outputParams.clear();
-	outputParams["network names"] = attributes::retweet_output_network + "," +
-		attributes::replies_output_network + "," +
-		attributes::quotes_output_network + "," +
-		//attributes::likes_output_network + "," +
+	outputParams["network names"] = 
+		attributes::retweet_given_network + "," +
+		attributes::replies_given_network + COMMA +
+		attributes::quotes_given_network + COMMA +
+
+		attributes::retweet_received_network + COMMA + 
+		attributes::quotes_received_network + COMMA + 
+		attributes::replies_received_network + COMMA + 
 		graph_names::twit_follow;
 	outputParams["time periods"] = "all";
 	outputParams["output file"] = attributes::output_dyxml + datetimeString + ".xml";
@@ -134,13 +139,19 @@ void addInteractionItemNames() {
 
 void createOutputNetworks(Construct& construct)
 {
-	Graph<unsigned int>* retweetOutputNetwork = construct.graph_manager.load_optional(attributes::retweet_output_network, 0u, nodeset_names::agents, dense, nodeset_names::time, dense);
+	Graph<unsigned int>* retweetOutputNetwork = construct.graph_manager.load_optional(attributes::retweet_given_network, 0u, nodeset_names::agents, dense, nodeset_names::time, dense);
 
-	Graph<unsigned int>* repliesOutputNetwork = construct.graph_manager.load_optional(attributes::replies_output_network, 0u, nodeset_names::agents, dense, nodeset_names::time, dense);
+	Graph<unsigned int>* repliesOutputNetwork = construct.graph_manager.load_optional(attributes::replies_given_network, 0u, nodeset_names::agents, dense, nodeset_names::time, dense);
 
-	Graph<unsigned int>* quotesOutputNetwork = construct.graph_manager.load_optional(attributes::quotes_output_network, 0u, nodeset_names::agents, dense, nodeset_names::time, dense);
+	Graph<unsigned int>* quotesOutputNetwork = construct.graph_manager.load_optional(attributes::quotes_given_network, 0u, nodeset_names::agents, dense, nodeset_names::time, dense);
 
-	Graph<unsigned int>* likesOutputNetwork = construct.graph_manager.load_optional(attributes::likes_output_network, 0u, nodeset_names::agents, dense, nodeset_names::time, dense);
+	Graph<unsigned int>* likesOutputNetwork = construct.graph_manager.load_optional(attributes::likes_given_network, 0u, nodeset_names::agents, dense, nodeset_names::time, dense);
+
+	Graph<unsigned int>* retweet_received_network = construct.graph_manager.load_optional(attributes::retweet_received_network, 0u, nodeset_names::agents, dense, nodeset_names::time, dense);
+
+	Graph<unsigned int>* replies_received_network = construct.graph_manager.load_optional(attributes::replies_received_network, 0u, nodeset_names::agents, dense, nodeset_names::time, dense);
+
+	Graph<unsigned int>* quotes_received_network = construct.graph_manager.load_optional(attributes::quotes_received_network, 0u, nodeset_names::agents, dense, nodeset_names::time, dense);
 }
 
 void createFollowerNet(Construct& construct, Nodeset* agentNodeset, dynet::ParameterMap generator_params)

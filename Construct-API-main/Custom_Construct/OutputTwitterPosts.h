@@ -27,15 +27,10 @@ struct OutputTwitterPosts : public Output {
 
 	void msg_out(const Social_Media_no_followers::media_event& msg, const unsigned int current_timestep) {
 
-		//TODO: Add BENDe
-
 		static bool headers_written = false;
 
 		if (!headers_written) {
 			// Write CSV header row
-			_output_file << "current_timestep,timestep_created,user,last_used,num_quotes,num_reply,"
-				<< "num_retweets,parent_event,root_event,msg_id" << std::endl;
-
 			_output_file << "current_timestep,msg_id,timestep_created,user,parent_event,root_event,last_used,num_quotes,num_reply,num_retweets,back_present,build_present,bridge_present,boost_present,excite_present,engage_present,explain_present,enhance_present,neutralize_present,negate_present,narrow_present,neglect_present,dismay_present,dismiss_present,distort_present,distract_present,sad_present,fear_present,anger_present,happy_present,disgust_present,surprise_present" << std::endl;
 
 			headers_written = true;

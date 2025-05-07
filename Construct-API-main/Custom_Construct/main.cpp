@@ -19,7 +19,7 @@ using namespace attributes;
 using namespace bendEmotions;
 
 #define TWITTERFORMULATION 3
-#define TIME_COUNT 2
+#define TIME_COUNT attributes::timecount
 
 #define DELTA_T 1.0	//in hours
 
